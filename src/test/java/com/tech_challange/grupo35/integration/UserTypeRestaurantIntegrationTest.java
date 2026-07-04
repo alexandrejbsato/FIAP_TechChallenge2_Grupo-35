@@ -18,7 +18,7 @@ class UserTypeRestaurantIntegrationTest {
     @LocalServerPort
     private int port;
 
-    private final RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate = new RestTemplate(new org.springframework.http.client.HttpComponentsClientHttpRequestFactory());
 
     private String url(String path) {
         return "http://localhost:" + port + path;
