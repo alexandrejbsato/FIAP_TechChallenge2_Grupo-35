@@ -26,10 +26,9 @@ class UserTypeRestaurantIntegrationTest {
 
     @Test
     void fullFlow_createUserType_createUser_assignType_createRestaurant() {
-        // create user type
-        Map<String, String> userTypeReq = Map.of("name", "RESTAURANT_OWNER");
-        ResponseEntity<Map> utResp = restTemplate.postForEntity(url("/api/v1/user-types"), userTypeReq, Map.class);
-        assertThat(utResp.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        // RESTAURANT_OWNER já vem semeado por migração; busca o id pelo nome
+        ResponseEntity<Map> utResp = restTemplate.getForEntity(url("/api/v1/user-types?name=RESTAURANT_OWNER"), Map.class);
+        assertThat(utResp.getStatusCode()).isEqualTo(HttpStatus.OK);
         String userTypeId = (String) ((Map) utResp.getBody()).get("id");
 
         // create user
