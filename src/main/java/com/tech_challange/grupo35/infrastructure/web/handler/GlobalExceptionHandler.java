@@ -114,6 +114,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return problemDetail;
     }
 
+    @ExceptionHandler(MenuItemNotFoundException.class)
+    public ProblemDetail handleMenuItemNotFound(MenuItemNotFoundException ex) {
+        ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.NOT_FOUND);
+        problemDetail.setTitle("Item do Cardapio Nao Encontrado");
+        problemDetail.setDetail(ex.getMessage());
+        return problemDetail;
+    }
+
     @ExceptionHandler(InvalidRestaurantOwnerException.class)
     public ProblemDetail handleInvalidRestaurantOwner(InvalidRestaurantOwnerException ex) {
         ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.CONFLICT);
