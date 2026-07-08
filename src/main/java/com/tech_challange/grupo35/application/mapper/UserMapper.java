@@ -5,10 +5,14 @@ import com.tech_challange.grupo35.application.dto.UpdateUserRequest;
 import com.tech_challange.grupo35.application.dto.UserResponse;
 import com.tech_challange.grupo35.domain.model.User;
 import com.tech_challange.grupo35.domain.model.UserType;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class UserMapper {
+
+    private final AddressMapper addressMapper;
 
     public User toModel(CreateUserRequest request) {
         return User.create(
@@ -16,7 +20,7 @@ public class UserMapper {
                 request.email(),
                 request.login(),
                 request.password(),
-                request.address(),
+                addressMapper.toDomain(request.address()),
                 request.cpf()
         );
     }
@@ -26,7 +30,7 @@ public class UserMapper {
                 request.name(),
                 request.email(),
                 request.login(),
-                request.address(),
+                addressMapper.toDomain(request.address()),
                 request.cpf()
         );
         return current;
@@ -40,7 +44,7 @@ public class UserMapper {
                 user.getName(),
                 user.getEmail(),
                 user.getLogin(),
-                user.getAddress(),
+                addressMapper.toDto(user.getAddress()),
                 user.getLastUpdatedAt(),
                 user.getCpf(),
                 userType != null ? userType.getId() : null,

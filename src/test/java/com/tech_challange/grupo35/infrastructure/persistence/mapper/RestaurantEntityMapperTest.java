@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
@@ -25,6 +26,9 @@ class RestaurantEntityMapperTest {
 
     @Mock
     private UserEntityMapper userMapper;
+
+    @Spy
+    private AddressEntityMapper addressMapper = new AddressEntityMapper();
 
     @InjectMocks
     private RestaurantEntityMapper mapper;

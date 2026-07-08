@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 public class UserEntityMapper {
 
     private final UserTypeEntityMapper userTypeMapper;
+    private final AddressEntityMapper addressMapper;
 
     public User toDomain(UserEntity entity) {
         if (entity == null) {
@@ -21,7 +22,7 @@ public class UserEntityMapper {
                 entity.getEmail(),
                 entity.getLogin(),
                 entity.getPassword(),
-                entity.getAddress(),
+                addressMapper.toDomain(entity.getAddress()),
                 entity.getCpf(),
                 entity.getLastUpdatedAt(),
                 userTypeMapper.toDomain(entity.getUserType())
@@ -38,7 +39,7 @@ public class UserEntityMapper {
         entity.setEmail(domain.getEmail());
         entity.setLogin(domain.getLogin());
         entity.setPassword(domain.getPassword());
-        entity.setAddress(domain.getAddress());
+        entity.setAddress(addressMapper.toEmbeddable(domain.getAddress()));
         entity.setCpf(domain.getCpf());
         entity.setLastUpdatedAt(domain.getLastUpdatedAt());
         entity.setUserType(userTypeMapper.toEntity(domain.getUserType()));

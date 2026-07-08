@@ -1,5 +1,6 @@
 package com.tech_challange.grupo35.application.dto;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 
 public record UpdateUserRequest(
@@ -10,7 +11,8 @@ public record UpdateUserRequest(
 
         String login,
 
-        String address,
+        @Valid
+        AddressDto address,
 
         String cpf
 ) {}

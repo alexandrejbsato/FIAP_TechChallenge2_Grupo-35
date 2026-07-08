@@ -15,7 +15,7 @@ class RestaurantTest {
     private User user(String typeName) {
         UserType type = typeName == null ? null : UserType.create(typeName);
         return User.reconstitute(UUID.randomUUID(), "Owner", "mail@mail.com", "login",
-                "secret", "address", "12345678900", null, type);
+                "secret", address(), "12345678900", null, type);
     }
 
     private Address address() {

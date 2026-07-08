@@ -55,7 +55,14 @@ public class UserController {
                           "name": "João Silva",
                           "email": "joao.silva@email.com",
                           "login": "joaosilva",
-                          "address": "Rua das Flores, 100, São Paulo - SP",
+                          "address": {
+                            "street": "Rua das Flores",
+                            "number": "100",
+                            "neighborhood": "Centro",
+                            "city": "São Paulo",
+                            "state": "SP",
+                            "zipCode": "01000-000"
+                          },
                           "lastUpdatedAt": "2024-01-15T10:30:00",
                           "cpf": "123.456.789-00",
                           "userTypeId": null,
@@ -95,7 +102,14 @@ public class UserController {
                           "email": "joao.silva@email.com",
                           "login": "joaosilva",
                           "password": "senha123",
-                          "address": "Rua das Flores, 100, São Paulo - SP",
+                          "address": {
+                            "street": "Rua das Flores",
+                            "number": "100",
+                            "neighborhood": "Centro",
+                            "city": "São Paulo",
+                            "state": "SP",
+                            "zipCode": "01000-000"
+                          },
                           "cpf": "123.456.789-00"
                         }
                         """)))
@@ -115,7 +129,14 @@ public class UserController {
                           "name": "João Silva Atualizado",
                           "email": "joao.silva@email.com",
                           "login": "joaosilva",
-                          "address": "Av. Paulista, 1000, São Paulo - SP",
+                          "address": {
+                            "street": "Av. Paulista",
+                            "number": "1000",
+                            "neighborhood": "Bela Vista",
+                            "city": "São Paulo",
+                            "state": "SP",
+                            "zipCode": "01310-100"
+                          },
                           "lastUpdatedAt": "2024-01-15T11:00:00",
                           "cpf": "123.456.789-00",
                           "userTypeId": null,
@@ -163,7 +184,14 @@ public class UserController {
                     examples = @ExampleObject(value = """
                         {
                           "name": "João Silva Atualizado",
-                          "address": "Av. Paulista, 1000, São Paulo - SP"
+                          "address": {
+                            "street": "Av. Paulista",
+                            "number": "1000",
+                            "neighborhood": "Bela Vista",
+                            "city": "São Paulo",
+                            "state": "SP",
+                            "zipCode": "01310-100"
+                          }
                         }
                         """)))
             @RequestBody @Valid UpdateUserRequest request) {
@@ -244,7 +272,14 @@ public class UserController {
                             "name": "João Silva",
                             "email": "joao.silva@email.com",
                             "login": "joaosilva",
-                            "address": "Rua das Flores, 100, São Paulo - SP",
+                            "address": {
+                              "street": "Rua das Flores",
+                              "number": "100",
+                              "neighborhood": "Centro",
+                              "city": "São Paulo",
+                              "state": "SP",
+                              "zipCode": "01000-000"
+                            },
                             "lastUpdatedAt": "2024-01-15T10:30:00",
                             "cpf": "123.456.789-00",
                             "userTypeId": null,

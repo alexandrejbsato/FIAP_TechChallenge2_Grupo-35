@@ -8,7 +8,7 @@ public record UserResponse(
         String name,
         String email,
         String login,
-        String address,
+        AddressDto address,
         LocalDateTime lastUpdatedAt,
         String cpf,
         UUID userTypeId,

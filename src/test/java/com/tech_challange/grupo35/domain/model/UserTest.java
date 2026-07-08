@@ -14,14 +14,18 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class UserTest {
 
+    private Address address() {
+        return Address.create("Rua A", "10", "Centro", "Cidade", "ST", "00000-000");
+    }
+
     private User userWith(String password, UserType userType) {
         return User.reconstitute(UUID.randomUUID(), "Name", "mail@mail.com", "login",
-                password, "address", "12345678900", null, userType);
+                password, address(), "12345678900", null, userType);
     }
 
     @Test
     void createStampsTimestampAndLeavesIdAndTypeNull() {
-        User user = User.create("Name", "mail@mail.com", "login", "secret", "address", "12345678900");
+        User user = User.create("Name", "mail@mail.com", "login", "secret", address(), "12345678900");
 
         assertNull(user.getId());
         assertNull(user.getUserType());
@@ -32,7 +36,7 @@ class UserTest {
     @Test
     void createRejectsBlankRequiredField() {
         assertThrows(IllegalArgumentException.class,
-                () -> User.create(" ", "mail@mail.com", "login", "secret", "address", "12345678900"));
+                () -> User.create(" ", "mail@mail.com", "login", "secret", address(), "12345678900"));
     }
 
     @Test

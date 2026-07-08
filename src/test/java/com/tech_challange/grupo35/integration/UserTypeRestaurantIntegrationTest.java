@@ -33,12 +33,20 @@ class UserTypeRestaurantIntegrationTest {
         String userTypeId = (String) ((Map) utResp.getBody()).get("id");
 
         // create user
-        Map<String, String> userReq = new HashMap<>();
+        Map<String, Object> userAddress = new HashMap<>();
+        userAddress.put("street", "Rua X");
+        userAddress.put("number", "1");
+        userAddress.put("neighborhood", "Centro");
+        userAddress.put("city", "Cidade");
+        userAddress.put("state", "ST");
+        userAddress.put("zipCode", "00000-000");
+
+        Map<String, Object> userReq = new HashMap<>();
         userReq.put("name", "Owner One");
         userReq.put("email", "owner1@example.com");
         userReq.put("login", "owner1");
         userReq.put("password", "pass123");
-        userReq.put("address", "Rua X, 1");
+        userReq.put("address", userAddress);
         userReq.put("cpf", "00000000000");
 
         ResponseEntity<Map> userResp = restTemplate.postForEntity(url("/api/v1/users"), userReq, Map.class);

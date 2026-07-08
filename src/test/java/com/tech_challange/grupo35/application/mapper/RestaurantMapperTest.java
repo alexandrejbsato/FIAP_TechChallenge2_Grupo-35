@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class RestaurantMapperTest {
 
-    private final RestaurantMapper mapper = new RestaurantMapper();
+    private final RestaurantMapper mapper = new RestaurantMapper(new AddressMapper());
 
     private AddressDto addressDto() {
         return new AddressDto("Rua A", "10", "Centro", "Cidade", "ST", "00000-000");
@@ -29,8 +29,9 @@ class RestaurantMapperTest {
 
     private User owner(String typeName) {
         UserType type = typeName == null ? null : UserType.create(typeName);
+        Address address = Address.create("Rua A", "10", "Centro", "Cidade", "ST", "00000-000");
         return User.reconstitute(UUID.randomUUID(), "Dono", "mail@mail.com", "login",
-                "secret", "address", "12345678900", null, type);
+                "secret", address, "12345678900", null, type);
     }
 
     private Restaurant restaurant(Address address, User owner) {

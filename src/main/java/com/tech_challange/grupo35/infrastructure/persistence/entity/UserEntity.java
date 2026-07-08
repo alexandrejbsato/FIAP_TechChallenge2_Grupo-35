@@ -1,6 +1,7 @@
 package com.tech_challange.grupo35.infrastructure.persistence.entity;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -39,8 +40,8 @@ public class UserEntity {
     @Column(name = "last_updated_at", nullable = false)
     private LocalDateTime lastUpdatedAt;
 
-    @Column(name = "address", nullable = false)
-    private String address;
+    @Embedded
+    private AddressEmbeddable address;
 
     @Column(name = "cpf", nullable = false, unique = true)
     private String cpf;

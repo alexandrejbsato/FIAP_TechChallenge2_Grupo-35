@@ -14,13 +14,13 @@ public class User {
     private String email;
     private String login;
     private String password;
-    private String address;
+    private Address address;
     private String cpf;
     private LocalDateTime lastUpdatedAt;
     private UserType userType;
 
     private User(UUID id, String name, String email, String login, String password,
-                 String address, String cpf, LocalDateTime lastUpdatedAt, UserType userType) {
+                 Address address, String cpf, LocalDateTime lastUpdatedAt, UserType userType) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -37,12 +37,12 @@ public class User {
      * O id é gerado pela persistência e o tipo é atribuído posteriormente.
      */
     public static User create(String name, String email, String login, String password,
-                              String address, String cpf) {
+                              Address address, String cpf) {
         requireNotBlank(name, "name");
         requireNotBlank(email, "email");
         requireNotBlank(login, "login");
         requireNotBlank(password, "password");
-        requireNotBlank(address, "address");
+        requireNotNull(address, "address");
         requireNotBlank(cpf, "cpf");
         return new User(null, name, email, login, password, address, cpf, LocalDateTime.now(), null);
     }
@@ -51,7 +51,7 @@ public class User {
      * Reconstitui um usuário já existente a partir da persistência, sem revalidar.
      */
     public static User reconstitute(UUID id, String name, String email, String login, String password,
-                                    String address, String cpf, LocalDateTime lastUpdatedAt, UserType userType) {
+                                    Address address, String cpf, LocalDateTime lastUpdatedAt, UserType userType) {
         return new User(id, name, email, login, password, address, cpf, lastUpdatedAt, userType);
     }
 
@@ -77,7 +77,7 @@ public class User {
     }
 
     public void updateProfile(String name, String email, String login,
-                              String address, String cpf) {
+                              Address address, String cpf) {
         if (name != null) this.name = name;
         if (email != null) this.email = email;
         if (login != null) this.login = login;
@@ -88,6 +88,12 @@ public class User {
 
     private static void requireNotBlank(String value, String field) {
         if (value == null || value.isBlank()) {
+            throw new IllegalArgumentException(field + " is required");
+        }
+    }
+
+    private static void requireNotNull(Object value, String field) {
+        if (value == null) {
             throw new IllegalArgumentException(field + " is required");
         }
     }
