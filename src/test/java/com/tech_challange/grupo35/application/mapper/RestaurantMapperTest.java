@@ -4,10 +4,12 @@ import com.tech_challange.grupo35.application.dto.AddressDto;
 import com.tech_challange.grupo35.application.dto.CreateRestaurantRequest;
 import com.tech_challange.grupo35.application.dto.RestaurantResponse;
 import com.tech_challange.grupo35.application.dto.UpdateRestaurantRequest;
+import com.tech_challange.grupo35.domain.exception.InvalidRestaurantOwnerException;
 import com.tech_challange.grupo35.domain.model.Address;
 import com.tech_challange.grupo35.domain.model.Restaurant;
 import com.tech_challange.grupo35.domain.model.User;
 import com.tech_challange.grupo35.domain.model.UserType;
+import com.tech_challange.grupo35.domain.model.UserTypeNames;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
@@ -15,6 +17,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class RestaurantMapperTest {
 
@@ -25,20 +28,18 @@ class RestaurantMapperTest {
     }
 
     private User owner(String typeName) {
-        User user = new User();
-        user.setId(UUID.randomUUID());
-        user.setName("Dono");
-        if (typeName != null) {
-            UserType type = new UserType();
-            type.setName(typeName);
-            user.setUserType(type);
-        }
-        return user;
+        UserType type = typeName == null ? null : UserType.create(typeName);
+        return User.reconstitute(UUID.randomUUID(), "Dono", "mail@mail.com", "login",
+                "secret", "address", "12345678900", null, type);
+    }
+
+    private Restaurant restaurant(Address address, User owner) {
+        return Restaurant.reconstitute(UUID.randomUUID(), "Resto", address, "Italiana", "09-18", owner);
     }
 
     @Test
     void toModelMapsAllFields() {
-        User owner = owner("RESTAURANT_OWNER");
+        User owner = owner(UserTypeNames.RESTAURANT_OWNER);
         CreateRestaurantRequest request =
                 new CreateRestaurantRequest("Resto", addressDto(), "Italiana", "09-18", owner.getId());
 
@@ -53,10 +54,18 @@ class RestaurantMapperTest {
     }
 
     @Test
+    void toModelRejectsNonOwner() {
+        User customer = owner(UserTypeNames.CUSTOMER);
+        CreateRestaurantRequest request =
+                new CreateRestaurantRequest("Resto", addressDto(), "Italiana", "09-18", customer.getId());
+
+        assertThrows(InvalidRestaurantOwnerException.class, () -> mapper.toModel(request, customer));
+    }
+
+    @Test
     void updateModelMutatesExistingRestaurant() {
-        Restaurant current = new Restaurant();
-        current.setName("Old");
-        User owner = owner("RESTAURANT_OWNER");
+        Restaurant current = restaurant(null, owner(UserTypeNames.RESTAURANT_OWNER));
+        User owner = owner(UserTypeNames.RESTAURANT_OWNER);
         UpdateRestaurantRequest request =
                 new UpdateRestaurantRequest("New", addressDto(), "Japonesa", "10-22", owner.getId());
 
@@ -71,16 +80,8 @@ class RestaurantMapperTest {
 
     @Test
     void toResponseMapsAddressAndOwner() {
-        Restaurant restaurant = new Restaurant();
-        restaurant.setId(UUID.randomUUID());
-        restaurant.setName("Resto");
-        restaurant.setCuisineType("Italiana");
-        restaurant.setOpeningHours("09-18");
-        Address address = new Address();
-        address.setStreet("Rua A");
-        address.setCity("Cidade");
-        restaurant.setAddress(address);
-        restaurant.setOwner(owner("RESTAURANT_OWNER"));
+        Address address = Address.create("Rua A", "10", "Centro", "Cidade", "ST", "00000-000");
+        Restaurant restaurant = restaurant(address, owner(UserTypeNames.RESTAURANT_OWNER));
 
         RestaurantResponse response = mapper.toResponse(restaurant);
 
@@ -92,8 +93,7 @@ class RestaurantMapperTest {
 
     @Test
     void toResponseHandlesNullOwnerAndAddress() {
-        Restaurant restaurant = new Restaurant();
-        restaurant.setName("Resto");
+        Restaurant restaurant = restaurant(null, null);
 
         RestaurantResponse response = mapper.toResponse(restaurant);
 
@@ -103,8 +103,7 @@ class RestaurantMapperTest {
 
     @Test
     void toResponseHandlesOwnerWithoutType() {
-        Restaurant restaurant = new Restaurant();
-        restaurant.setOwner(owner(null));
+        Restaurant restaurant = restaurant(null, owner(null));
 
         RestaurantResponse response = mapper.toResponse(restaurant);
 

@@ -15,17 +15,17 @@ public class UserEntityMapper {
         if (entity == null) {
             return null;
         }
-        User user = new User();
-        user.setId(entity.getId());
-        user.setName(entity.getName());
-        user.setEmail(entity.getEmail());
-        user.setLogin(entity.getLogin());
-        user.setPassword(entity.getPassword());
-        user.setAddress(entity.getAddress());
-        user.setCpf(entity.getCpf());
-        user.setLastUpdatedAt(entity.getLastUpdatedAt());
-        user.setUserType(userTypeMapper.toDomain(entity.getUserType()));
-        return user;
+        return User.reconstitute(
+                entity.getId(),
+                entity.getName(),
+                entity.getEmail(),
+                entity.getLogin(),
+                entity.getPassword(),
+                entity.getAddress(),
+                entity.getCpf(),
+                entity.getLastUpdatedAt(),
+                userTypeMapper.toDomain(entity.getUserType())
+        );
     }
 
     public UserEntity toEntity(User domain) {

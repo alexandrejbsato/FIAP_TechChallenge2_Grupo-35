@@ -1,12 +1,12 @@
 package com.tech_challange.grupo35.domain.model;
 
 import com.tech_challange.grupo35.domain.exception.InvalidPasswordException;
-import lombok.Data;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Data
+@Getter
 public class User {
 
     private UUID id;
@@ -18,6 +18,42 @@ public class User {
     private String cpf;
     private LocalDateTime lastUpdatedAt;
     private UserType userType;
+
+    private User(UUID id, String name, String email, String login, String password,
+                 String address, String cpf, LocalDateTime lastUpdatedAt, UserType userType) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.login = login;
+        this.password = password;
+        this.address = address;
+        this.cpf = cpf;
+        this.lastUpdatedAt = lastUpdatedAt;
+        this.userType = userType;
+    }
+
+    /**
+     * Cria um usuário novo, validando os campos obrigatórios e carimbando o timestamp.
+     * O id é gerado pela persistência e o tipo é atribuído posteriormente.
+     */
+    public static User create(String name, String email, String login, String password,
+                              String address, String cpf) {
+        requireNotBlank(name, "name");
+        requireNotBlank(email, "email");
+        requireNotBlank(login, "login");
+        requireNotBlank(password, "password");
+        requireNotBlank(address, "address");
+        requireNotBlank(cpf, "cpf");
+        return new User(null, name, email, login, password, address, cpf, LocalDateTime.now(), null);
+    }
+
+    /**
+     * Reconstitui um usuário já existente a partir da persistência, sem revalidar.
+     */
+    public static User reconstitute(UUID id, String name, String email, String login, String password,
+                                    String address, String cpf, LocalDateTime lastUpdatedAt, UserType userType) {
+        return new User(id, name, email, login, password, address, cpf, lastUpdatedAt, userType);
+    }
 
     public boolean isRestaurantOwner() {
         return userType != null && userType.isRestaurantOwner();
@@ -48,5 +84,11 @@ public class User {
         if (address != null) this.address = address;
         if (cpf != null) this.cpf = cpf;
         this.lastUpdatedAt = LocalDateTime.now();
+    }
+
+    private static void requireNotBlank(String value, String field) {
+        if (value == null || value.isBlank()) {
+            throw new IllegalArgumentException(field + " is required");
+        }
     }
 }

@@ -27,9 +27,7 @@ class UserTypeEntityMapperTest {
 
     @Test
     void toEntityMapsFields() {
-        UserType domain = new UserType();
-        domain.setId(UUID.randomUUID());
-        domain.setName("RESTAURANT_OWNER");
+        UserType domain = UserType.reconstitute(UUID.randomUUID(), "RESTAURANT_OWNER");
 
         UserTypeEntity entity = mapper.toEntity(domain);
 

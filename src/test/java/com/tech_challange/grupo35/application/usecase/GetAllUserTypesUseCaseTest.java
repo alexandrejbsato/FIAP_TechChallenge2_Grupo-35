@@ -27,12 +27,8 @@ class GetAllUserTypesUseCaseTest {
 
     @Test
     void returnsMappedList() {
-        UserType a = new UserType();
-        a.setId(UUID.randomUUID());
-        a.setName("CUSTOMER");
-        UserType b = new UserType();
-        b.setId(UUID.randomUUID());
-        b.setName("RESTAURANT_OWNER");
+        UserType a = UserType.reconstitute(UUID.randomUUID(), "CUSTOMER");
+        UserType b = UserType.reconstitute(UUID.randomUUID(), "RESTAURANT_OWNER");
         when(userTypeRepository.findAll()).thenReturn(List.of(a, b));
 
         List<UserTypeResponse> response = useCase.execute();

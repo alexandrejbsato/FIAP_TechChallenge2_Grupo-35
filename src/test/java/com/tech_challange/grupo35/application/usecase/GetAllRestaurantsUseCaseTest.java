@@ -15,6 +15,7 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -31,10 +32,8 @@ class GetAllRestaurantsUseCaseTest {
 
     @Test
     void returnsMappedList() {
-        Restaurant r1 = new Restaurant();
-        r1.setId(UUID.randomUUID());
-        Restaurant r2 = new Restaurant();
-        r2.setId(UUID.randomUUID());
+        Restaurant r1 = mock(Restaurant.class);
+        Restaurant r2 = mock(Restaurant.class);
         RestaurantResponse resp1 = new RestaurantResponse(UUID.randomUUID(), "A", null, null, null, null);
         RestaurantResponse resp2 = new RestaurantResponse(UUID.randomUUID(), "B", null, null, null, null);
         when(restaurantRepository.findAll()).thenReturn(List.of(r1, r2));

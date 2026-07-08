@@ -17,6 +17,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -40,14 +41,7 @@ class RestaurantEntityMapperTest {
     }
 
     private Address domainAddress() {
-        Address address = new Address();
-        address.setStreet("Rua A");
-        address.setNumber("10");
-        address.setNeighborhood("Centro");
-        address.setCity("Cidade");
-        address.setState("ST");
-        address.setZipCode("00000-000");
-        return address;
+        return Address.create("Rua A", "10", "Centro", "Cidade", "ST", "00000-000");
     }
 
     @Test
@@ -60,7 +54,7 @@ class RestaurantEntityMapperTest {
         entity.setAddress(embeddable());
         UserEntity ownerEntity = new UserEntity();
         entity.setOwner(ownerEntity);
-        User owner = new User();
+        User owner = mock(User.class);
         when(userMapper.toDomain(ownerEntity)).thenReturn(owner);
 
         Restaurant restaurant = mapper.toDomain(entity);
@@ -75,14 +69,9 @@ class RestaurantEntityMapperTest {
 
     @Test
     void toEntityMapsAllFields() {
-        Restaurant restaurant = new Restaurant();
-        restaurant.setId(UUID.randomUUID());
-        restaurant.setName("Resto");
-        restaurant.setCuisineType("Italiana");
-        restaurant.setOpeningHours("09-18");
-        restaurant.setAddress(domainAddress());
-        User owner = new User();
-        restaurant.setOwner(owner);
+        User owner = mock(User.class);
+        Restaurant restaurant = Restaurant.reconstitute(UUID.randomUUID(), "Resto", domainAddress(),
+                "Italiana", "09-18", owner);
         UserEntity ownerEntity = new UserEntity();
         when(userMapper.toEntity(owner)).thenReturn(ownerEntity);
 

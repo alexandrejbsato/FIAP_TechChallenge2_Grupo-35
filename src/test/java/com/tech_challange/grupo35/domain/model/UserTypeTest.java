@@ -2,26 +2,43 @@ package com.tech_challange.grupo35.domain.model;
 
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class UserTypeTest {
 
-    private UserType type(String name) {
-        UserType type = new UserType();
-        type.setName(name);
-        return type;
-    }
-
     @Test
     void isRestaurantOwnerTrueOnlyForOwnerName() {
-        assertTrue(type(UserTypeNames.RESTAURANT_OWNER).isRestaurantOwner());
-        assertFalse(type(UserTypeNames.CUSTOMER).isRestaurantOwner());
+        assertTrue(UserType.create(UserTypeNames.RESTAURANT_OWNER).isRestaurantOwner());
+        assertFalse(UserType.create(UserTypeNames.CUSTOMER).isRestaurantOwner());
     }
 
     @Test
     void isCustomerTrueOnlyForCustomerName() {
-        assertTrue(type(UserTypeNames.CUSTOMER).isCustomer());
-        assertFalse(type(UserTypeNames.RESTAURANT_OWNER).isCustomer());
+        assertTrue(UserType.create(UserTypeNames.CUSTOMER).isCustomer());
+        assertFalse(UserType.create(UserTypeNames.RESTAURANT_OWNER).isCustomer());
+    }
+
+    @Test
+    void createRejectsBlankName() {
+        assertThrows(IllegalArgumentException.class, () -> UserType.create(" "));
+    }
+
+    @Test
+    void renameChangesName() {
+        UserType type = UserType.create(UserTypeNames.CUSTOMER);
+
+        type.rename("MANAGER");
+
+        assertEquals("MANAGER", type.getName());
+    }
+
+    @Test
+    void renameRejectsBlankName() {
+        UserType type = UserType.create(UserTypeNames.CUSTOMER);
+
+        assertThrows(IllegalArgumentException.class, () -> type.rename(" "));
     }
 }

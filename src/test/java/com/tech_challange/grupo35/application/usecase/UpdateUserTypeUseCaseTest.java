@@ -32,10 +32,7 @@ class UpdateUserTypeUseCaseTest {
     private UpdateUserTypeUseCase useCase;
 
     private UserType existing(UUID id, String name) {
-        UserType userType = new UserType();
-        userType.setId(id);
-        userType.setName(name);
-        return userType;
+        return UserType.reconstitute(id, name);
     }
 
     @Test

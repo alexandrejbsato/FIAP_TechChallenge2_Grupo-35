@@ -15,21 +15,23 @@ import org.springframework.stereotype.Component;
 public class RestaurantMapper {
 
     public Restaurant toModel(CreateRestaurantRequest request, User owner) {
-        Restaurant restaurant = new Restaurant();
-        restaurant.setName(request.name());
-        restaurant.setAddress(toAddress(request.address()));
-        restaurant.setCuisineType(request.cuisineType());
-        restaurant.setOpeningHours(request.openingHours());
-        restaurant.setOwner(owner);
-        return restaurant;
+        return Restaurant.create(
+                request.name(),
+                toAddress(request.address()),
+                request.cuisineType(),
+                request.openingHours(),
+                owner
+        );
     }
 
     public Restaurant updateModel(Restaurant current, UpdateRestaurantRequest request, User owner) {
-        current.setName(request.name());
-        current.setAddress(toAddress(request.address()));
-        current.setCuisineType(request.cuisineType());
-        current.setOpeningHours(request.openingHours());
-        current.setOwner(owner);
+        current.updateDetails(
+                request.name(),
+                toAddress(request.address()),
+                request.cuisineType(),
+                request.openingHours()
+        );
+        current.changeOwner(owner);
         return current;
     }
 
@@ -48,14 +50,14 @@ public class RestaurantMapper {
         if (dto == null) {
             return null;
         }
-        Address address = new Address();
-        address.setStreet(dto.street());
-        address.setNumber(dto.number());
-        address.setNeighborhood(dto.neighborhood());
-        address.setCity(dto.city());
-        address.setState(dto.state());
-        address.setZipCode(dto.zipCode());
-        return address;
+        return Address.create(
+                dto.street(),
+                dto.number(),
+                dto.neighborhood(),
+                dto.city(),
+                dto.state(),
+                dto.zipCode()
+        );
     }
 
     private AddressDto toAddressDto(Address address) {

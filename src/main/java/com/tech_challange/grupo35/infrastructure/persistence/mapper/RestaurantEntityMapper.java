@@ -17,14 +17,14 @@ public class RestaurantEntityMapper {
         if (entity == null) {
             return null;
         }
-        Restaurant restaurant = new Restaurant();
-        restaurant.setId(entity.getId());
-        restaurant.setName(entity.getName());
-        restaurant.setAddress(toDomainAddress(entity.getAddress()));
-        restaurant.setCuisineType(entity.getCuisineType());
-        restaurant.setOpeningHours(entity.getOpeningHours());
-        restaurant.setOwner(userMapper.toDomain(entity.getOwner()));
-        return restaurant;
+        return Restaurant.reconstitute(
+                entity.getId(),
+                entity.getName(),
+                toDomainAddress(entity.getAddress()),
+                entity.getCuisineType(),
+                entity.getOpeningHours(),
+                userMapper.toDomain(entity.getOwner())
+        );
     }
 
     public RestaurantEntity toEntity(Restaurant domain) {
@@ -45,14 +45,14 @@ public class RestaurantEntityMapper {
         if (embeddable == null) {
             return null;
         }
-        Address address = new Address();
-        address.setStreet(embeddable.getStreet());
-        address.setNumber(embeddable.getNumber());
-        address.setNeighborhood(embeddable.getNeighborhood());
-        address.setCity(embeddable.getCity());
-        address.setState(embeddable.getState());
-        address.setZipCode(embeddable.getZipCode());
-        return address;
+        return Address.create(
+                embeddable.getStreet(),
+                embeddable.getNumber(),
+                embeddable.getNeighborhood(),
+                embeddable.getCity(),
+                embeddable.getState(),
+                embeddable.getZipCode()
+        );
     }
 
     private AddressEmbeddable toEmbeddableAddress(Address address) {

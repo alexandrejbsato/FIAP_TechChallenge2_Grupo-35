@@ -3,52 +3,60 @@ package com.tech_challange.grupo35.domain.model;
 import com.tech_challange.grupo35.domain.exception.InvalidPasswordException;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class UserTest {
 
-    private User userWithPassword(String password) {
-        User user = new User();
-        user.setPassword(password);
-        return user;
+    private User userWith(String password, UserType userType) {
+        return User.reconstitute(UUID.randomUUID(), "Name", "mail@mail.com", "login",
+                password, "address", "12345678900", null, userType);
     }
 
-    private UserType type(String name) {
-        UserType type = new UserType();
-        type.setName(name);
-        return type;
+    @Test
+    void createStampsTimestampAndLeavesIdAndTypeNull() {
+        User user = User.create("Name", "mail@mail.com", "login", "secret", "address", "12345678900");
+
+        assertNull(user.getId());
+        assertNull(user.getUserType());
+        assertNotNull(user.getLastUpdatedAt());
+        assertEquals("secret", user.getPassword());
+    }
+
+    @Test
+    void createRejectsBlankRequiredField() {
+        assertThrows(IllegalArgumentException.class,
+                () -> User.create(" ", "mail@mail.com", "login", "secret", "address", "12345678900"));
     }
 
     @Test
     void isRestaurantOwnerTrueWhenTypeMatches() {
-        User user = new User();
-        user.setUserType(type(UserTypeNames.RESTAURANT_OWNER));
+        User user = userWith("x", UserType.create(UserTypeNames.RESTAURANT_OWNER));
 
         assertTrue(user.isRestaurantOwner());
     }
 
     @Test
     void isRestaurantOwnerFalseWhenTypeIsNull() {
-        assertFalse(new User().isRestaurantOwner());
+        assertFalse(userWith("x", null).isRestaurantOwner());
     }
 
     @Test
     void isRestaurantOwnerFalseWhenTypeIsCustomer() {
-        User user = new User();
-        user.setUserType(type(UserTypeNames.CUSTOMER));
+        User user = userWith("x", UserType.create(UserTypeNames.CUSTOMER));
 
         assertFalse(user.isRestaurantOwner());
     }
 
     @Test
     void changePasswordUpdatesWhenCurrentMatches() {
-        User user = userWithPassword("old");
+        User user = userWith("old", null);
 
         user.changePassword("old", "new");
 
@@ -58,7 +66,7 @@ class UserTest {
 
     @Test
     void changePasswordThrowsWhenCurrentDoesNotMatch() {
-        User user = userWithPassword("old");
+        User user = userWith("old", null);
 
         assertThrows(InvalidPasswordException.class, () -> user.changePassword("wrong", "new"));
         assertEquals("old", user.getPassword());
@@ -66,7 +74,7 @@ class UserTest {
 
     @Test
     void passwordMatchesReflectsStoredPassword() {
-        User user = userWithPassword("secret");
+        User user = userWith("secret", null);
 
         assertTrue(user.passwordMatches("secret"));
         assertFalse(user.passwordMatches("other"));
@@ -74,8 +82,8 @@ class UserTest {
 
     @Test
     void assignTypeSetsTypeAndStampsTimestamp() {
-        User user = new User();
-        UserType owner = type(UserTypeNames.RESTAURANT_OWNER);
+        User user = userWith("x", null);
+        UserType owner = UserType.create(UserTypeNames.RESTAURANT_OWNER);
 
         user.assignType(owner);
 
@@ -85,16 +93,14 @@ class UserTest {
 
     @Test
     void updateProfileAppliesOnlyNonNullFields() {
-        User user = new User();
-        user.setName("original");
-        user.setEmail("original@mail.com");
+        User user = userWith("x", null);
 
-        user.updateProfile(null, "new@mail.com", "newlogin", null, "12345678900");
+        user.updateProfile(null, "new@mail.com", "newlogin", null, "99999999999");
 
-        assertEquals("original", user.getName());
+        assertEquals("Name", user.getName());
         assertEquals("new@mail.com", user.getEmail());
         assertEquals("newlogin", user.getLogin());
-        assertEquals("12345678900", user.getCpf());
+        assertEquals("99999999999", user.getCpf());
         assertNotNull(user.getLastUpdatedAt());
     }
 }

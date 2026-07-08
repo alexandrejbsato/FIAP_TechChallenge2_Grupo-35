@@ -16,6 +16,7 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -33,7 +34,7 @@ class GetRestaurantByIdUseCaseTest {
     @Test
     void returnsRestaurantWhenFound() {
         UUID id = UUID.randomUUID();
-        Restaurant restaurant = new Restaurant();
+        Restaurant restaurant = mock(Restaurant.class);
         RestaurantResponse expected = new RestaurantResponse(id, "Resto", null, "Italiana", "09-18", null);
         when(restaurantRepository.findById(id)).thenReturn(Optional.of(restaurant));
         when(restaurantMapper.toResponse(restaurant)).thenReturn(expected);

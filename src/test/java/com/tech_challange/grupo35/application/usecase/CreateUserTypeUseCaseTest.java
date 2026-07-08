@@ -31,9 +31,7 @@ class CreateUserTypeUseCaseTest {
 
     @Test
     void createsUserTypeWhenNameIsAvailable() {
-        UserType saved = new UserType();
-        saved.setId(UUID.randomUUID());
-        saved.setName("CUSTOMER");
+        UserType saved = UserType.reconstitute(UUID.randomUUID(), "CUSTOMER");
         when(userTypeRepository.existsByName("CUSTOMER")).thenReturn(false);
         when(userTypeRepository.save(any(UserType.class))).thenReturn(saved);
 

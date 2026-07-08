@@ -29,9 +29,7 @@ class GetUserTypeByIdUseCaseTest {
     @Test
     void returnsUserTypeWhenFound() {
         UUID id = UUID.randomUUID();
-        UserType userType = new UserType();
-        userType.setId(id);
-        userType.setName("CUSTOMER");
+        UserType userType = UserType.reconstitute(id, "CUSTOMER");
         when(userTypeRepository.findById(id)).thenReturn(Optional.of(userType));
 
         UserTypeResponse response = useCase.execute(id);

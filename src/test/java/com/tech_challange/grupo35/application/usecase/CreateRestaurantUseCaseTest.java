@@ -5,8 +5,8 @@ import com.tech_challange.grupo35.application.dto.CreateRestaurantRequest;
 import com.tech_challange.grupo35.application.dto.RestaurantResponse;
 import com.tech_challange.grupo35.application.mapper.RestaurantMapper;
 import com.tech_challange.grupo35.application.port.out.RestaurantRepository;
-import com.tech_challange.grupo35.application.validation.RestaurantOwnerValidator;
-import com.tech_challange.grupo35.domain.exception.InvalidRestaurantOwnerException;
+import com.tech_challange.grupo35.application.port.out.UserRepository;
+import com.tech_challange.grupo35.domain.exception.UserNotFoundException;
 import com.tech_challange.grupo35.domain.model.Restaurant;
 import com.tech_challange.grupo35.domain.model.User;
 import org.junit.jupiter.api.Test;
@@ -15,11 +15,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -31,7 +33,7 @@ class CreateRestaurantUseCaseTest {
     private RestaurantRepository restaurantRepository;
 
     @Mock
-    private RestaurantOwnerValidator ownerValidator;
+    private UserRepository userRepository;
 
     @Mock
     private RestaurantMapper restaurantMapper;
@@ -45,15 +47,15 @@ class CreateRestaurantUseCaseTest {
     }
 
     @Test
-    void createsRestaurantWithValidatedOwner() {
+    void createsRestaurantWithExistingOwner() {
         UUID ownerId = UUID.randomUUID();
         CreateRestaurantRequest request = request(ownerId);
-        User owner = new User();
-        Restaurant model = new Restaurant();
-        Restaurant saved = new Restaurant();
+        User owner = mock(User.class);
+        Restaurant model = mock(Restaurant.class);
+        Restaurant saved = mock(Restaurant.class);
         RestaurantResponse expected = new RestaurantResponse(UUID.randomUUID(), "Resto", null, "Italiana", "09-18", null);
 
-        when(ownerValidator.validateAndGet(ownerId)).thenReturn(owner);
+        when(userRepository.findById(ownerId)).thenReturn(Optional.of(owner));
         when(restaurantMapper.toModel(request, owner)).thenReturn(model);
         when(restaurantRepository.save(model)).thenReturn(saved);
         when(restaurantMapper.toResponse(saved)).thenReturn(expected);
@@ -65,12 +67,12 @@ class CreateRestaurantUseCaseTest {
     }
 
     @Test
-    void doesNotSaveWhenOwnerIsInvalid() {
+    void doesNotSaveWhenOwnerNotFound() {
         UUID ownerId = UUID.randomUUID();
         CreateRestaurantRequest request = request(ownerId);
-        when(ownerValidator.validateAndGet(ownerId)).thenThrow(new InvalidRestaurantOwnerException(ownerId));
+        when(userRepository.findById(ownerId)).thenReturn(Optional.empty());
 
-        assertThrows(InvalidRestaurantOwnerException.class, () -> useCase.execute(request));
+        assertThrows(UserNotFoundException.class, () -> useCase.execute(request));
         verify(restaurantRepository, never()).save(any());
     }
 }
