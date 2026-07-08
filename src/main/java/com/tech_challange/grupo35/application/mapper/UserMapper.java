@@ -25,12 +25,13 @@ public class UserMapper {
     }
 
     public User updateModel(User current, UpdateUserRequest request) {
-        if (request.name() != null) current.setName(request.name());
-        if (request.email() != null) current.setEmail(request.email());
-        if (request.login() != null) current.setLogin(request.login());
-        if (request.address() != null) current.setAddress(request.address());
-        if (request.cpf() != null) current.setCpf(request.cpf());
-        current.setLastUpdatedAt(LocalDateTime.now());
+        current.updateProfile(
+                request.name(),
+                request.email(),
+                request.login(),
+                request.address(),
+                request.cpf()
+        );
         return current;
     }
 

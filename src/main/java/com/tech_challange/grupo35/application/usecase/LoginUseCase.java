@@ -22,7 +22,7 @@ public class LoginUseCase implements LoginUser {
         User user = userRepository.findByLogin(login)
                 .orElseThrow(UserNotFoundException::new);
 
-        if (!user.getPassword().equals(password)) {
+        if (!user.passwordMatches(password)) {
             throw new InvalidPasswordException();
         }
 
