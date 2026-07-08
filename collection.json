@@ -34,7 +34,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"João Cliente\",\n  \"email\": \"joao.cliente@example.com\",\n  \"login\": \"{{customerLogin}}\",\n  \"password\": \"{{customerPassword}}\",\n  \"address\": \"Rua das Flores, 123 - São Paulo/SP\",\n  \"cpf\": \"12345678901\"\n}",
+              "raw": "{\n  \"name\": \"João Cliente\",\n  \"email\": \"joao.cliente@example.com\",\n  \"login\": \"{{customerLogin}}\",\n  \"password\": \"{{customerPassword}}\",\n  \"address\": {\n    \"street\": \"Rua das Flores\",\n    \"number\": \"123\",\n    \"neighborhood\": \"Centro\",\n    \"city\": \"São Paulo\",\n    \"state\": \"SP\",\n    \"zipCode\": \"01000-000\"\n  },\n  \"cpf\": \"12345678901\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -79,7 +79,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"João Cliente\",\n  \"email\": \"joao.cliente@example.com\",\n  \"login\": \"login.diferente\",\n  \"password\": \"{{customerPassword}}\",\n  \"address\": \"Rua das Flores, 123 - São Paulo/SP\",\n  \"cpf\": \"11111111111\"\n}",
+              "raw": "{\n  \"name\": \"João Cliente\",\n  \"email\": \"joao.cliente@example.com\",\n  \"login\": \"login.diferente\",\n  \"password\": \"{{customerPassword}}\",\n  \"address\": {\n    \"street\": \"Rua das Flores\",\n    \"number\": \"123\",\n    \"neighborhood\": \"Centro\",\n    \"city\": \"São Paulo\",\n    \"state\": \"SP\",\n    \"zipCode\": \"01000-000\"\n  },\n  \"cpf\": \"11111111111\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -124,7 +124,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"João Cliente\",\n  \"email\": \"email.diferente@example.com\",\n  \"login\": \"{{customerLogin}}\",\n  \"password\": \"{{customerPassword}}\",\n  \"address\": \"Rua das Flores, 123 - São Paulo/SP\",\n  \"cpf\": \"22222222222\"\n}",
+              "raw": "{\n  \"name\": \"João Cliente\",\n  \"email\": \"email.diferente@example.com\",\n  \"login\": \"{{customerLogin}}\",\n  \"password\": \"{{customerPassword}}\",\n  \"address\": {\n    \"street\": \"Rua das Flores\",\n    \"number\": \"123\",\n    \"neighborhood\": \"Centro\",\n    \"city\": \"São Paulo\",\n    \"state\": \"SP\",\n    \"zipCode\": \"01000-000\"\n  },\n  \"cpf\": \"22222222222\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -169,7 +169,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Outro Cliente\",\n  \"email\": \"outro.cliente@example.com\",\n  \"login\": \"outro.customer\",\n  \"password\": \"Senha@123\",\n  \"address\": \"Rua Diferente, 999 - Campinas/SP\",\n  \"cpf\": \"12345678901\"\n}",
+              "raw": "{\n  \"name\": \"Outro Cliente\",\n  \"email\": \"outro.cliente@example.com\",\n  \"login\": \"outro.customer\",\n  \"password\": \"Senha@123\",\n  \"address\": {\n    \"street\": \"Rua Diferente\",\n    \"number\": \"999\",\n    \"neighborhood\": \"Centro\",\n    \"city\": \"Campinas\",\n    \"state\": \"SP\",\n    \"zipCode\": \"13000-000\"\n  },\n  \"cpf\": \"12345678901\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -214,7 +214,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"\",\n  \"email\": \"email-invalido\",\n  \"login\": \"\",\n  \"password\": \"\",\n  \"address\": \"\",\n  \"cpf\": \"\"\n}",
+              "raw": "{\n  \"name\": \"\",\n  \"email\": \"email-invalido\",\n  \"login\": \"\",\n  \"password\": \"\",\n  \"address\": {\n    \"street\": \"\",\n    \"number\": \"\",\n    \"neighborhood\": \"\",\n    \"city\": \"\",\n    \"state\": \"\",\n    \"zipCode\": \"\"\n  },\n  \"cpf\": \"\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -260,7 +260,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Maria Restaurante\",\n  \"email\": \"maria.owner@example.com\",\n  \"login\": \"{{ownerLogin}}\",\n  \"password\": \"{{ownerPassword}}\",\n  \"address\": \"Av. Central, 500 - Rio de Janeiro/RJ\",\n  \"cpf\": \"98765432100\"\n}",
+              "raw": "{\n  \"name\": \"Maria Restaurante\",\n  \"email\": \"maria.owner@example.com\",\n  \"login\": \"{{ownerLogin}}\",\n  \"password\": \"{{ownerPassword}}\",\n  \"address\": {\n    \"street\": \"Av. Central\",\n    \"number\": \"500\",\n    \"neighborhood\": \"Centro\",\n    \"city\": \"Rio de Janeiro\",\n    \"state\": \"RJ\",\n    \"zipCode\": \"20000-000\"\n  },\n  \"cpf\": \"98765432100\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -1560,7 +1560,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"João Cliente Atualizado\",\n  \"email\": \"joao.cliente.atualizado@example.com\",\n  \"login\": \"joao.customer.updated\",\n  \"address\": \"Rua Atualizada, 456 - São Paulo/SP\",\n  \"cpf\": \"12345678901\"\n}",
+              "raw": "{\n  \"name\": \"João Cliente Atualizado\",\n  \"email\": \"joao.cliente.atualizado@example.com\",\n  \"login\": \"joao.customer.updated\",\n  \"address\": {\n    \"street\": \"Rua Atualizada\",\n    \"number\": \"456\",\n    \"neighborhood\": \"Centro\",\n    \"city\": \"São Paulo\",\n    \"state\": \"SP\",\n    \"zipCode\": \"01000-000\"\n  },\n  \"cpf\": \"12345678901\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -1672,7 +1672,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Maria Restaurante Atualizada\",\n  \"email\": \"maria.owner.atualizada@example.com\",\n  \"login\": \"maria.owner.updated\",\n  \"address\": \"Av. Atualizada, 999 - Rio de Janeiro/RJ\",\n  \"cpf\": \"98765432100\"\n}",
+              "raw": "{\n  \"name\": \"Maria Restaurante Atualizada\",\n  \"email\": \"maria.owner.atualizada@example.com\",\n  \"login\": \"maria.owner.updated\",\n  \"address\": {\n    \"street\": \"Av. Atualizada\",\n    \"number\": \"999\",\n    \"neighborhood\": \"Centro\",\n    \"city\": \"Rio de Janeiro\",\n    \"state\": \"RJ\",\n    \"zipCode\": \"20000-000\"\n  },\n  \"cpf\": \"98765432100\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -1823,7 +1823,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Carlos Dono Restaurante\",\n  \"email\": \"carlos.resto.owner@example.com\",\n  \"login\": \"{{restoOwnerLogin}}\",\n  \"password\": \"{{restoOwnerPassword}}\",\n  \"address\": \"Rua dos Restaurantes, 10 - São Paulo/SP\",\n  \"cpf\": \"33344455566\"\n}",
+              "raw": "{\n  \"name\": \"Carlos Dono Restaurante\",\n  \"email\": \"carlos.resto.owner@example.com\",\n  \"login\": \"{{restoOwnerLogin}}\",\n  \"password\": \"{{restoOwnerPassword}}\",\n  \"address\": {\n    \"street\": \"Rua dos Restaurantes\",\n    \"number\": \"10\",\n    \"neighborhood\": \"Centro\",\n    \"city\": \"São Paulo\",\n    \"state\": \"SP\",\n    \"zipCode\": \"01000-000\"\n  },\n  \"cpf\": \"33344455566\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -1869,7 +1869,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Ana Cliente\",\n  \"email\": \"ana.resto.nonowner@example.com\",\n  \"login\": \"ana.resto.nonowner\",\n  \"password\": \"Senha@123\",\n  \"address\": \"Rua Qualquer, 20 - São Paulo/SP\",\n  \"cpf\": \"77788899900\"\n}",
+              "raw": "{\n  \"name\": \"Ana Cliente\",\n  \"email\": \"ana.resto.nonowner@example.com\",\n  \"login\": \"ana.resto.nonowner\",\n  \"password\": \"Senha@123\",\n  \"address\": {\n    \"street\": \"Rua Qualquer\",\n    \"number\": \"20\",\n    \"neighborhood\": \"Centro\",\n    \"city\": \"São Paulo\",\n    \"state\": \"SP\",\n    \"zipCode\": \"01000-000\"\n  },\n  \"cpf\": \"77788899900\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
