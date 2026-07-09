@@ -4,9 +4,7 @@ import com.tech_challange.grupo35.application.dto.MenuItemResponse;
 import com.tech_challange.grupo35.domain.model.MenuItem;
 import com.tech_challange.grupo35.domain.model.Restaurant;
 import java.util.List;
-import org.springframework.stereotype.Component;
 
-@Component // temporário; removido no Plano 2
 public class MenuItemPresenter {
 
     public MenuItemResponse toResponse(MenuItem item) {

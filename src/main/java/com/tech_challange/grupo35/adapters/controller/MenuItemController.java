@@ -12,9 +12,7 @@ import com.tech_challange.grupo35.application.port.in.UpdateMenuItem;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 
-@Component // temporário; removido no Plano 2
 @RequiredArgsConstructor
 public class MenuItemController {
 
@@ -24,6 +22,13 @@ public class MenuItemController {
     private final UpdateMenuItem updateMenuItem;
     private final DeleteMenuItem deleteMenuItem;
     private final MenuItemPresenter presenter;
+
+    public static MenuItemController create(CreateMenuItem createMenuItem,
+            GetMenuItemsByRestaurant getMenuItemsByRestaurant, GetMenuItemById getMenuItemById,
+            UpdateMenuItem updateMenuItem, DeleteMenuItem deleteMenuItem, MenuItemPresenter presenter) {
+        return new MenuItemController(createMenuItem, getMenuItemsByRestaurant, getMenuItemById, updateMenuItem,
+                deleteMenuItem, presenter);
+    }
 
     public MenuItemResponse create(UUID restaurantId, CreateMenuItemRequest request) {
         return presenter.toResponse(createMenuItem.execute(restaurantId, request));

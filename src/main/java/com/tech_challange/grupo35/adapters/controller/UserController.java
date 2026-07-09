@@ -18,9 +18,7 @@ import com.tech_challange.grupo35.application.port.in.UpdateUser;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 
-@Component // temporário; removido no Plano 2
 @RequiredArgsConstructor
 public class UserController {
 
@@ -32,6 +30,13 @@ public class UserController {
     private final LoginUser loginUser;
     private final AssignUserType assignUserType;
     private final UserPresenter presenter;
+
+    public static UserController create(CreateUser createUser, UpdateUser updateUser, ChangePassword changePassword,
+            DeleteUser deleteUser, FindUsersByName findUsersByName, LoginUser loginUser, AssignUserType assignUserType,
+            UserPresenter presenter) {
+        return new UserController(createUser, updateUser, changePassword, deleteUser, findUsersByName, loginUser,
+                assignUserType, presenter);
+    }
 
     public UserResponse create(CreateUserRequest request) {
         return presenter.toResponse(createUser.execute(request));

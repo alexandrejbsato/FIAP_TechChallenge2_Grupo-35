@@ -6,9 +6,7 @@ import com.tech_challange.grupo35.domain.model.User;
 import com.tech_challange.grupo35.domain.model.UserType;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 
-@Component // temporário; removido no Plano 2
 @RequiredArgsConstructor
 public class UserPresenter {
 

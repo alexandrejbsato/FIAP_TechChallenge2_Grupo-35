@@ -12,9 +12,7 @@ import com.tech_challange.grupo35.application.port.in.UpdateRestaurant;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 
-@Component // temporário; removido no Plano 2
 @RequiredArgsConstructor
 public class RestaurantController {
 
@@ -24,6 +22,13 @@ public class RestaurantController {
     private final UpdateRestaurant updateRestaurant;
     private final DeleteRestaurant deleteRestaurant;
     private final RestaurantPresenter presenter;
+
+    public static RestaurantController create(CreateRestaurant createRestaurant, GetAllRestaurants getAllRestaurants,
+            GetRestaurantById getRestaurantById, UpdateRestaurant updateRestaurant, DeleteRestaurant deleteRestaurant,
+            RestaurantPresenter presenter) {
+        return new RestaurantController(createRestaurant, getAllRestaurants, getRestaurantById, updateRestaurant,
+                deleteRestaurant, presenter);
+    }
 
     public RestaurantResponse create(CreateRestaurantRequest request) {
         return presenter.toResponse(createRestaurant.execute(request));
