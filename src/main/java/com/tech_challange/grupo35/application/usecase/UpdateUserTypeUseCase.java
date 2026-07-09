@@ -1,7 +1,6 @@
 package com.tech_challange.grupo35.application.usecase;
 
 import com.tech_challange.grupo35.application.dto.UpdateUserTypeRequest;
-import com.tech_challange.grupo35.application.dto.UserTypeResponse;
 import com.tech_challange.grupo35.application.port.in.UpdateUserType;
 import com.tech_challange.grupo35.domain.exception.UserTypeNameAlreadyExistsException;
 import com.tech_challange.grupo35.domain.exception.UserTypeNotFoundException;
@@ -19,7 +18,7 @@ public class UpdateUserTypeUseCase implements UpdateUserType {
     private final UserTypeRepository userTypeRepository;
 
     @Override
-    public UserTypeResponse execute(UUID id, UpdateUserTypeRequest request) {
+    public UserType execute(UUID id, UpdateUserTypeRequest request) {
         UserType userType = userTypeRepository.findById(id)
                 .orElseThrow(() -> new UserTypeNotFoundException(id));
 
@@ -30,7 +29,6 @@ public class UpdateUserTypeUseCase implements UpdateUserType {
 
         userType.rename(request.name());
 
-        UserType saved = userTypeRepository.save(userType);
-        return new UserTypeResponse(saved.getId(), saved.getName());
+        return userTypeRepository.save(userType);
     }
 }

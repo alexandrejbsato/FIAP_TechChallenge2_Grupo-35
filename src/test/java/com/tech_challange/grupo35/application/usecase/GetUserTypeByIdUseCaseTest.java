@@ -1,6 +1,5 @@
 package com.tech_challange.grupo35.application.usecase;
 
-import com.tech_challange.grupo35.application.dto.UserTypeResponse;
 import com.tech_challange.grupo35.application.port.out.UserTypeRepository;
 import com.tech_challange.grupo35.domain.exception.UserTypeNotFoundException;
 import com.tech_challange.grupo35.domain.model.UserType;
@@ -32,10 +31,10 @@ class GetUserTypeByIdUseCaseTest {
         UserType userType = UserType.reconstitute(id, "CUSTOMER");
         when(userTypeRepository.findById(id)).thenReturn(Optional.of(userType));
 
-        UserTypeResponse response = useCase.execute(id);
+        UserType response = useCase.execute(id);
 
-        assertEquals(id, response.id());
-        assertEquals("CUSTOMER", response.name());
+        assertEquals(id, response.getId());
+        assertEquals("CUSTOMER", response.getName());
     }
 
     @Test

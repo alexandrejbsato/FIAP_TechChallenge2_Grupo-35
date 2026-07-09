@@ -1,14 +1,9 @@
 package com.tech_challange.grupo35.infrastructure.web.controller;
 
+import com.tech_challange.grupo35.adapters.controller.UserTypeController;
 import com.tech_challange.grupo35.application.dto.CreateUserTypeRequest;
 import com.tech_challange.grupo35.application.dto.UpdateUserTypeRequest;
 import com.tech_challange.grupo35.application.dto.UserTypeResponse;
-import com.tech_challange.grupo35.application.port.in.CreateUserType;
-import com.tech_challange.grupo35.application.port.in.DeleteUserType;
-import com.tech_challange.grupo35.application.port.in.GetAllUserTypes;
-import com.tech_challange.grupo35.application.port.in.GetUserTypeById;
-import com.tech_challange.grupo35.application.port.in.GetUserTypeByName;
-import com.tech_challange.grupo35.application.port.in.UpdateUserType;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -29,14 +24,9 @@ import java.util.UUID;
 @RequestMapping("/api/v1/user-types")
 @RequiredArgsConstructor
 @Tag(name = "Tipos de Usuário", description = "Endpoints para gerenciar tipos de usuário")
-public class UserTypeController {
+public class UserTypeApiController {
 
-    private final CreateUserType createUserTypeUseCase;
-    private final GetAllUserTypes getAllUserTypesUseCase;
-    private final GetUserTypeById getUserTypeByIdUseCase;
-    private final GetUserTypeByName getUserTypeByNameUseCase;
-    private final UpdateUserType updateUserTypeUseCase;
-    private final DeleteUserType deleteUserTypeUseCase;
+    private final UserTypeController controller;
 
     @PostMapping
     @Operation(summary = "Criar tipo de usuário", description = "Cria um novo tipo de usuário com um nome único")
@@ -80,7 +70,7 @@ public class UserTypeController {
                         { "name": "Cliente" }
                         """)))
             @RequestBody @Valid CreateUserTypeRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(createUserTypeUseCase.execute(request));
+        return ResponseEntity.status(HttpStatus.CREATED).body(controller.create(request));
     }
 
     @GetMapping
@@ -96,7 +86,7 @@ public class UserTypeController {
                         """)))
     })
     public ResponseEntity<List<UserTypeResponse>> findAll() {
-        return ResponseEntity.ok(getAllUserTypesUseCase.execute());
+        return ResponseEntity.ok(controller.findAll());
     }
 
     @GetMapping(params = "name")
@@ -119,7 +109,7 @@ public class UserTypeController {
                         """)))
     })
     public ResponseEntity<UserTypeResponse> findByName(@RequestParam String name) {
-        return ResponseEntity.ok(getUserTypeByNameUseCase.execute(name));
+        return ResponseEntity.ok(controller.findByName(name));
     }
 
     @GetMapping("/{id}")
@@ -142,7 +132,7 @@ public class UserTypeController {
                         """)))
     })
     public ResponseEntity<UserTypeResponse> findById(@PathVariable UUID id) {
-        return ResponseEntity.ok(getUserTypeByIdUseCase.execute(id));
+        return ResponseEntity.ok(controller.findById(id));
     }
 
     @PutMapping("/{id}")
@@ -195,7 +185,7 @@ public class UserTypeController {
                         { "name": "Cliente Premium" }
                         """)))
             @RequestBody @Valid UpdateUserTypeRequest request) {
-        return ResponseEntity.ok(updateUserTypeUseCase.execute(id, request));
+        return ResponseEntity.ok(controller.update(id, request));
     }
 
     @DeleteMapping("/{id}")
@@ -214,7 +204,7 @@ public class UserTypeController {
                         """)))
     })
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
-        deleteUserTypeUseCase.execute(id);
+        controller.delete(id);
         return ResponseEntity.noContent().build();
     }
 }

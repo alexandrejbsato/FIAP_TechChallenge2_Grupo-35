@@ -1,7 +1,6 @@
 package com.tech_challange.grupo35.application.usecase;
 
 import com.tech_challange.grupo35.application.dto.UpdateUserTypeRequest;
-import com.tech_challange.grupo35.application.dto.UserTypeResponse;
 import com.tech_challange.grupo35.application.port.out.UserTypeRepository;
 import com.tech_challange.grupo35.domain.exception.UserTypeNameAlreadyExistsException;
 import com.tech_challange.grupo35.domain.exception.UserTypeNotFoundException;
@@ -42,9 +41,9 @@ class UpdateUserTypeUseCaseTest {
         when(userTypeRepository.existsByName("NEW")).thenReturn(false);
         when(userTypeRepository.save(any(UserType.class))).thenAnswer(inv -> inv.getArgument(0));
 
-        UserTypeResponse response = useCase.execute(id, new UpdateUserTypeRequest("NEW"));
+        UserType response = useCase.execute(id, new UpdateUserTypeRequest("NEW"));
 
-        assertEquals("NEW", response.name());
+        assertEquals("NEW", response.getName());
         verify(userTypeRepository).save(any(UserType.class));
     }
 
@@ -54,9 +53,9 @@ class UpdateUserTypeUseCaseTest {
         when(userTypeRepository.findById(id)).thenReturn(Optional.of(existing(id, "SAME")));
         when(userTypeRepository.save(any(UserType.class))).thenAnswer(inv -> inv.getArgument(0));
 
-        UserTypeResponse response = useCase.execute(id, new UpdateUserTypeRequest("SAME"));
+        UserType response = useCase.execute(id, new UpdateUserTypeRequest("SAME"));
 
-        assertEquals("SAME", response.name());
+        assertEquals("SAME", response.getName());
         verify(userTypeRepository, never()).existsByName(any());
     }
 
