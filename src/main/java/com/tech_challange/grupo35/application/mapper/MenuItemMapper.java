@@ -11,22 +11,24 @@ import org.springframework.stereotype.Component;
 public class MenuItemMapper {
 
     public MenuItem toModel(CreateMenuItemRequest request, Restaurant restaurant) {
-        MenuItem menuItem = new MenuItem();
-        menuItem.setName(request.name());
-        menuItem.setDescription(request.description());
-        menuItem.setPrice(request.price());
-        menuItem.setAvailableOnlyInRestaurant(request.availableOnlyInRestaurant());
-        menuItem.setPhotoPath(request.photoPath());
-        menuItem.setRestaurant(restaurant);
-        return menuItem;
+        return MenuItem.create(
+                request.name(),
+                request.description(),
+                request.price(),
+                request.availableOnlyInRestaurant(),
+                request.photoPath(),
+                restaurant
+        );
     }
 
     public MenuItem updateModel(MenuItem current, UpdateMenuItemRequest request) {
-        current.setName(request.name());
-        current.setDescription(request.description());
-        current.setPrice(request.price());
-        current.setAvailableOnlyInRestaurant(request.availableOnlyInRestaurant());
-        current.setPhotoPath(request.photoPath());
+        current.updateDetails(
+                request.name(),
+                request.description(),
+                request.price(),
+                request.availableOnlyInRestaurant(),
+                request.photoPath()
+        );
         return current;
     }
 

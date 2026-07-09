@@ -15,15 +15,15 @@ public class MenuItemEntityMapper {
         if (entity == null) {
             return null;
         }
-        MenuItem menuItem = new MenuItem();
-        menuItem.setId(entity.getId());
-        menuItem.setName(entity.getName());
-        menuItem.setDescription(entity.getDescription());
-        menuItem.setPrice(entity.getPrice());
-        menuItem.setAvailableOnlyInRestaurant(entity.getAvailableOnlyInRestaurant());
-        menuItem.setPhotoPath(entity.getPhotoPath());
-        menuItem.setRestaurant(restaurantMapper.toDomain(entity.getRestaurant()));
-        return menuItem;
+        return MenuItem.reconstitute(
+                entity.getId(),
+                entity.getName(),
+                entity.getDescription(),
+                entity.getPrice(),
+                entity.getAvailableOnlyInRestaurant(),
+                entity.getPhotoPath(),
+                restaurantMapper.toDomain(entity.getRestaurant())
+        );
     }
 
     public MenuItemEntity toEntity(MenuItem domain) {
