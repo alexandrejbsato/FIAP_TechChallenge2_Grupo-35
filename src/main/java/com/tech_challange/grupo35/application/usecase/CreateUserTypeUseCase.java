@@ -6,13 +6,15 @@ import com.tech_challange.grupo35.domain.exception.UserTypeNameAlreadyExistsExce
 import com.tech_challange.grupo35.domain.model.UserType;
 import com.tech_challange.grupo35.application.port.out.UserTypeRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
-@Service
 @RequiredArgsConstructor
 public class CreateUserTypeUseCase implements CreateUserType {
 
     private final UserTypeRepository userTypeRepository;
+
+    public static CreateUserTypeUseCase create(UserTypeRepository userTypeRepository) {
+        return new CreateUserTypeUseCase(userTypeRepository);
+    }
 
     @Override
     public UserType execute(CreateUserTypeRequest request) {

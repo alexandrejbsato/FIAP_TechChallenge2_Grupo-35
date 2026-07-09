@@ -7,15 +7,17 @@ import com.tech_challange.grupo35.domain.exception.UserTypeNotFoundException;
 import com.tech_challange.grupo35.domain.model.UserType;
 import com.tech_challange.grupo35.application.port.out.UserTypeRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
-@Service
 @RequiredArgsConstructor
 public class UpdateUserTypeUseCase implements UpdateUserType {
 
     private final UserTypeRepository userTypeRepository;
+
+    public static UpdateUserTypeUseCase create(UserTypeRepository userTypeRepository) {
+        return new UpdateUserTypeUseCase(userTypeRepository);
+    }
 
     @Override
     public UserType execute(UUID id, UpdateUserTypeRequest request) {

@@ -5,15 +5,17 @@ import com.tech_challange.grupo35.domain.exception.UserTypeNotFoundException;
 import com.tech_challange.grupo35.domain.model.UserType;
 import com.tech_challange.grupo35.application.port.out.UserTypeRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
-@Service
 @RequiredArgsConstructor
 public class GetUserTypeByIdUseCase implements GetUserTypeById {
 
     private final UserTypeRepository userTypeRepository;
+
+    public static GetUserTypeByIdUseCase create(UserTypeRepository userTypeRepository) {
+        return new GetUserTypeByIdUseCase(userTypeRepository);
+    }
 
     @Override
     public UserType execute(UUID id) {
