@@ -8,14 +8,16 @@ import com.tech_challange.grupo35.domain.exception.UserNotFoundException;
 import com.tech_challange.grupo35.domain.model.User;
 import com.tech_challange.grupo35.application.port.out.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
-@Service
 @RequiredArgsConstructor
 public class LoginUseCase implements LoginUser {
 
     private final UserRepository userRepository;
     private final TokenService tokenService;
+
+    public static LoginUseCase create(UserRepository userRepository, TokenService tokenService) {
+        return new LoginUseCase(userRepository, tokenService);
+    }
 
     @Override
     public LoginResponse execute(String login, String password) {

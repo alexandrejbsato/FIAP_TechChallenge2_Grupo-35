@@ -10,16 +10,18 @@ import com.tech_challange.grupo35.domain.exception.LoginAlreadyExistsException;
 import com.tech_challange.grupo35.domain.exception.UserNotFoundException;
 import com.tech_challange.grupo35.domain.model.User;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
-@Service
 @RequiredArgsConstructor
 public class UpdateUserUseCase implements UpdateUser {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+
+    public static UpdateUserUseCase create(UserRepository userRepository, UserMapper userMapper) {
+        return new UpdateUserUseCase(userRepository, userMapper);
+    }
 
     @Override
     public User execute(UUID id, UpdateUserRequest request) {

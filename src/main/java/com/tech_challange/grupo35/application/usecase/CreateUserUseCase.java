@@ -9,14 +9,16 @@ import com.tech_challange.grupo35.domain.exception.EmailAlreadyExistsException;
 import com.tech_challange.grupo35.domain.exception.LoginAlreadyExistsException;
 import com.tech_challange.grupo35.domain.model.User;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
-@Service
 @RequiredArgsConstructor
 public class CreateUserUseCase implements CreateUser {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+
+    public static CreateUserUseCase create(UserRepository userRepository, UserMapper userMapper) {
+        return new CreateUserUseCase(userRepository, userMapper);
+    }
 
     @Override
     public User execute(CreateUserRequest request) {

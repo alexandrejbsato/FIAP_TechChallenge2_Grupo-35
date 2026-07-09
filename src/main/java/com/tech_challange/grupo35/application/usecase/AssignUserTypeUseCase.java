@@ -9,16 +9,18 @@ import com.tech_challange.grupo35.domain.model.UserType;
 import com.tech_challange.grupo35.application.port.out.UserRepository;
 import com.tech_challange.grupo35.application.port.out.UserTypeRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
-@Service
 @RequiredArgsConstructor
 public class AssignUserTypeUseCase implements AssignUserType {
 
     private final UserRepository userRepository;
     private final UserTypeRepository userTypeRepository;
+
+    public static AssignUserTypeUseCase create(UserRepository userRepository, UserTypeRepository userTypeRepository) {
+        return new AssignUserTypeUseCase(userRepository, userTypeRepository);
+    }
 
     @Override
     public User execute(UUID userId, AssignUserTypeRequest request) {
