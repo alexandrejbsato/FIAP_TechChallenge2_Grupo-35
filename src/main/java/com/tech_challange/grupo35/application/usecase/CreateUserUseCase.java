@@ -1,7 +1,6 @@
 package com.tech_challange.grupo35.application.usecase;
 
 import com.tech_challange.grupo35.application.dto.CreateUserRequest;
-import com.tech_challange.grupo35.application.dto.UserResponse;
 import com.tech_challange.grupo35.application.mapper.UserMapper;
 import com.tech_challange.grupo35.application.port.in.CreateUser;
 import com.tech_challange.grupo35.application.port.out.UserRepository;
@@ -20,7 +19,7 @@ public class CreateUserUseCase implements CreateUser {
     private final UserMapper userMapper;
 
     @Override
-    public UserResponse execute(CreateUserRequest request) {
+    public User execute(CreateUserRequest request) {
         if (userRepository.existsByEmail(request.email())) {
             throw new EmailAlreadyExistsException(request.email());
         }
@@ -33,6 +32,6 @@ public class CreateUserUseCase implements CreateUser {
 
         User user = userMapper.toModel(request);
 
-        return userMapper.toResponse(userRepository.save(user));
+        return userRepository.save(user);
     }
 }

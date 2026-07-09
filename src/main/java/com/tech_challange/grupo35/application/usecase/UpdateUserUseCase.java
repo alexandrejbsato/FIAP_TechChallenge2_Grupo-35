@@ -1,7 +1,6 @@
 package com.tech_challange.grupo35.application.usecase;
 
 import com.tech_challange.grupo35.application.dto.UpdateUserRequest;
-import com.tech_challange.grupo35.application.dto.UserResponse;
 import com.tech_challange.grupo35.application.mapper.UserMapper;
 import com.tech_challange.grupo35.application.port.in.UpdateUser;
 import com.tech_challange.grupo35.application.port.out.UserRepository;
@@ -23,7 +22,7 @@ public class UpdateUserUseCase implements UpdateUser {
     private final UserMapper userMapper;
 
     @Override
-    public UserResponse execute(UUID id, UpdateUserRequest request) {
+    public User execute(UUID id, UpdateUserRequest request) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
 
@@ -42,6 +41,6 @@ public class UpdateUserUseCase implements UpdateUser {
 
         User updated = userMapper.updateModel(user, request);
 
-        return userMapper.toResponse(userRepository.save(updated));
+        return userRepository.save(updated);
     }
 }
