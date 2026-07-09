@@ -8,14 +8,17 @@ import com.tech_challange.grupo35.domain.exception.RestaurantNotFoundException;
 import com.tech_challange.grupo35.domain.model.MenuItem;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
-@Service
 @RequiredArgsConstructor
 public class GetMenuItemByIdUseCase implements GetMenuItemById {
 
     private final RestaurantRepository restaurantRepository;
     private final MenuItemRepository menuItemRepository;
+
+    public static GetMenuItemByIdUseCase create(RestaurantRepository restaurantRepository,
+            MenuItemRepository menuItemRepository) {
+        return new GetMenuItemByIdUseCase(restaurantRepository, menuItemRepository);
+    }
 
     @Override
     public MenuItem execute(UUID restaurantId, UUID menuItemId) {

@@ -7,14 +7,17 @@ import com.tech_challange.grupo35.domain.exception.MenuItemNotFoundException;
 import com.tech_challange.grupo35.domain.exception.RestaurantNotFoundException;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
-@Service
 @RequiredArgsConstructor
 public class DeleteMenuItemUseCase implements DeleteMenuItem {
 
     private final RestaurantRepository restaurantRepository;
     private final MenuItemRepository menuItemRepository;
+
+    public static DeleteMenuItemUseCase create(RestaurantRepository restaurantRepository,
+            MenuItemRepository menuItemRepository) {
+        return new DeleteMenuItemUseCase(restaurantRepository, menuItemRepository);
+    }
 
     @Override
     public void execute(UUID restaurantId, UUID menuItemId) {

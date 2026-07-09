@@ -10,15 +10,18 @@ import com.tech_challange.grupo35.domain.exception.RestaurantNotFoundException;
 import com.tech_challange.grupo35.domain.model.MenuItem;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
-@Service
 @RequiredArgsConstructor
 public class UpdateMenuItemUseCase implements UpdateMenuItem {
 
     private final RestaurantRepository restaurantRepository;
     private final MenuItemRepository menuItemRepository;
     private final MenuItemMapper menuItemMapper;
+
+    public static UpdateMenuItemUseCase create(RestaurantRepository restaurantRepository,
+            MenuItemRepository menuItemRepository, MenuItemMapper menuItemMapper) {
+        return new UpdateMenuItemUseCase(restaurantRepository, menuItemRepository, menuItemMapper);
+    }
 
     @Override
     public MenuItem execute(UUID restaurantId, UUID menuItemId, UpdateMenuItemRequest request) {

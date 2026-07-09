@@ -10,15 +10,18 @@ import com.tech_challange.grupo35.domain.model.MenuItem;
 import com.tech_challange.grupo35.domain.model.Restaurant;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
-@Service
 @RequiredArgsConstructor
 public class CreateMenuItemUseCase implements CreateMenuItem {
 
     private final RestaurantRepository restaurantRepository;
     private final MenuItemRepository menuItemRepository;
     private final MenuItemMapper menuItemMapper;
+
+    public static CreateMenuItemUseCase create(RestaurantRepository restaurantRepository,
+            MenuItemRepository menuItemRepository, MenuItemMapper menuItemMapper) {
+        return new CreateMenuItemUseCase(restaurantRepository, menuItemRepository, menuItemMapper);
+    }
 
     @Override
     public MenuItem execute(UUID restaurantId, CreateMenuItemRequest request) {
