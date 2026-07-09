@@ -9,15 +9,18 @@ import com.tech_challange.grupo35.domain.exception.UserNotFoundException;
 import com.tech_challange.grupo35.domain.model.Restaurant;
 import com.tech_challange.grupo35.domain.model.User;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
-@Service
 @RequiredArgsConstructor
 public class CreateRestaurantUseCase implements CreateRestaurant {
 
     private final RestaurantRepository restaurantRepository;
     private final UserRepository userRepository;
     private final RestaurantMapper restaurantMapper;
+
+    public static CreateRestaurantUseCase create(RestaurantRepository restaurantRepository,
+            UserRepository userRepository, RestaurantMapper restaurantMapper) {
+        return new CreateRestaurantUseCase(restaurantRepository, userRepository, restaurantMapper);
+    }
 
     @Override
     public Restaurant execute(CreateRestaurantRequest request) {
