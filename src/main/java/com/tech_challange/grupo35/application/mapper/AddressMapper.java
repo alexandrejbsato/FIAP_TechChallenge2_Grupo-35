@@ -2,9 +2,7 @@ package com.tech_challange.grupo35.application.mapper;
 
 import com.tech_challange.grupo35.application.dto.AddressDto;
 import com.tech_challange.grupo35.domain.model.Address;
-import org.springframework.stereotype.Component;
 
-@Component
 public class AddressMapper {
 
     public Address toDomain(AddressDto dto) {

@@ -4,9 +4,7 @@ import com.tech_challange.grupo35.application.dto.CreateMenuItemRequest;
 import com.tech_challange.grupo35.application.dto.UpdateMenuItemRequest;
 import com.tech_challange.grupo35.domain.model.MenuItem;
 import com.tech_challange.grupo35.domain.model.Restaurant;
-import org.springframework.stereotype.Component;
 
-@Component
 public class MenuItemMapper {
 
     public MenuItem toModel(CreateMenuItemRequest request, Restaurant restaurant) {

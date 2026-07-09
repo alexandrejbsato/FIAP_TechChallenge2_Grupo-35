@@ -5,9 +5,7 @@ import com.tech_challange.grupo35.application.dto.UpdateRestaurantRequest;
 import com.tech_challange.grupo35.domain.model.Restaurant;
 import com.tech_challange.grupo35.domain.model.User;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 
-@Component
 @RequiredArgsConstructor
 public class RestaurantMapper {
 
