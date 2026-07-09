@@ -1,7 +1,5 @@
 package com.tech_challange.grupo35.application.usecase;
 
-import com.tech_challange.grupo35.application.dto.RestaurantResponse;
-import com.tech_challange.grupo35.application.mapper.RestaurantMapper;
 import com.tech_challange.grupo35.application.port.out.RestaurantRepository;
 import com.tech_challange.grupo35.domain.exception.RestaurantNotFoundException;
 import com.tech_challange.grupo35.domain.model.Restaurant;
@@ -25,9 +23,6 @@ class GetRestaurantByIdUseCaseTest {
     @Mock
     private RestaurantRepository restaurantRepository;
 
-    @Mock
-    private RestaurantMapper restaurantMapper;
-
     @InjectMocks
     private GetRestaurantByIdUseCase useCase;
 
@@ -35,11 +30,9 @@ class GetRestaurantByIdUseCaseTest {
     void returnsRestaurantWhenFound() {
         UUID id = UUID.randomUUID();
         Restaurant restaurant = mock(Restaurant.class);
-        RestaurantResponse expected = new RestaurantResponse(id, "Resto", null, "Italiana", "09-18", null);
         when(restaurantRepository.findById(id)).thenReturn(Optional.of(restaurant));
-        when(restaurantMapper.toResponse(restaurant)).thenReturn(expected);
 
-        assertSame(expected, useCase.execute(id));
+        assertSame(restaurant, useCase.execute(id));
     }
 
     @Test

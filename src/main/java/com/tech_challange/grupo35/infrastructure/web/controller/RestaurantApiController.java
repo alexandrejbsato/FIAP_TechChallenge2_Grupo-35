@@ -1,13 +1,9 @@
 package com.tech_challange.grupo35.infrastructure.web.controller;
 
+import com.tech_challange.grupo35.adapters.controller.RestaurantController;
 import com.tech_challange.grupo35.application.dto.CreateRestaurantRequest;
 import com.tech_challange.grupo35.application.dto.RestaurantResponse;
 import com.tech_challange.grupo35.application.dto.UpdateRestaurantRequest;
-import com.tech_challange.grupo35.application.port.in.CreateRestaurant;
-import com.tech_challange.grupo35.application.port.in.DeleteRestaurant;
-import com.tech_challange.grupo35.application.port.in.GetAllRestaurants;
-import com.tech_challange.grupo35.application.port.in.GetRestaurantById;
-import com.tech_challange.grupo35.application.port.in.UpdateRestaurant;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -28,13 +24,9 @@ import java.util.UUID;
 @RequestMapping("/api/v1/restaurants")
 @RequiredArgsConstructor
 @Tag(name = "Restaurantes", description = "Endpoints para gerenciar restaurantes")
-public class RestaurantController {
+public class RestaurantApiController {
 
-    private final CreateRestaurant createRestaurantUseCase;
-    private final GetAllRestaurants getAllRestaurantsUseCase;
-    private final GetRestaurantById getRestaurantByIdUseCase;
-    private final UpdateRestaurant updateRestaurantUseCase;
-    private final DeleteRestaurant deleteRestaurantUseCase;
+    private final RestaurantController controller;
 
     private static final String RESTAURANT_EXAMPLE = """
             {
@@ -121,7 +113,7 @@ public class RestaurantController {
                 content = @Content(mediaType = "application/json",
                     examples = @ExampleObject(value = REQUEST_EXAMPLE)))
             @RequestBody @Valid CreateRestaurantRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(createRestaurantUseCase.execute(request));
+        return ResponseEntity.status(HttpStatus.CREATED).body(controller.create(request));
     }
 
     @GetMapping
@@ -132,7 +124,7 @@ public class RestaurantController {
                     examples = @ExampleObject(value = "[" + RESTAURANT_EXAMPLE + "]")))
     })
     public ResponseEntity<List<RestaurantResponse>> findAll() {
-        return ResponseEntity.ok(getAllRestaurantsUseCase.execute());
+        return ResponseEntity.ok(controller.findAll());
     }
 
     @GetMapping("/{id}")
@@ -153,7 +145,7 @@ public class RestaurantController {
                         """)))
     })
     public ResponseEntity<RestaurantResponse> findById(@PathVariable UUID id) {
-        return ResponseEntity.ok(getRestaurantByIdUseCase.execute(id));
+        return ResponseEntity.ok(controller.findById(id));
     }
 
     @PutMapping("/{id}")
@@ -203,7 +195,7 @@ public class RestaurantController {
                 content = @Content(mediaType = "application/json",
                     examples = @ExampleObject(value = REQUEST_EXAMPLE)))
             @RequestBody @Valid UpdateRestaurantRequest request) {
-        return ResponseEntity.ok(updateRestaurantUseCase.execute(id, request));
+        return ResponseEntity.ok(controller.update(id, request));
     }
 
     @DeleteMapping("/{id}")
@@ -222,7 +214,7 @@ public class RestaurantController {
                         """)))
     })
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
-        deleteRestaurantUseCase.execute(id);
+        controller.delete(id);
         return ResponseEntity.noContent().build();
     }
 }

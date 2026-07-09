@@ -2,7 +2,6 @@ package com.tech_challange.grupo35.application.mapper;
 
 import com.tech_challange.grupo35.application.dto.AddressDto;
 import com.tech_challange.grupo35.application.dto.CreateRestaurantRequest;
-import com.tech_challange.grupo35.application.dto.RestaurantResponse;
 import com.tech_challange.grupo35.application.dto.UpdateRestaurantRequest;
 import com.tech_challange.grupo35.domain.exception.InvalidRestaurantOwnerException;
 import com.tech_challange.grupo35.domain.model.Address;
@@ -15,7 +14,6 @@ import org.junit.jupiter.api.Test;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -77,37 +75,5 @@ class RestaurantMapperTest {
         assertEquals("Japonesa", current.getCuisineType());
         assertEquals("Centro", current.getAddress().getNeighborhood());
         assertSame(owner, current.getOwner());
-    }
-
-    @Test
-    void toResponseMapsAddressAndOwner() {
-        Address address = Address.create("Rua A", "10", "Centro", "Cidade", "ST", "00000-000");
-        Restaurant restaurant = restaurant(address, owner(UserTypeNames.RESTAURANT_OWNER));
-
-        RestaurantResponse response = mapper.toResponse(restaurant);
-
-        assertEquals("Resto", response.name());
-        assertEquals("Rua A", response.address().street());
-        assertEquals("Dono", response.owner().name());
-        assertEquals("RESTAURANT_OWNER", response.owner().userType());
-    }
-
-    @Test
-    void toResponseHandlesNullOwnerAndAddress() {
-        Restaurant restaurant = restaurant(null, null);
-
-        RestaurantResponse response = mapper.toResponse(restaurant);
-
-        assertNull(response.address());
-        assertNull(response.owner());
-    }
-
-    @Test
-    void toResponseHandlesOwnerWithoutType() {
-        Restaurant restaurant = restaurant(null, owner(null));
-
-        RestaurantResponse response = mapper.toResponse(restaurant);
-
-        assertNull(response.owner().userType());
     }
 }
