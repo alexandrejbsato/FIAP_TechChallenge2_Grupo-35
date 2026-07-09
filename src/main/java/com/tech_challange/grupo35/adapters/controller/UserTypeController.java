@@ -25,7 +25,7 @@ public class UserTypeController {
     private final DeleteUserType deleteUserType;
     private final UserTypePresenter presenter;
 
-    public static UserTypeController create(CreateUserType createUserType, GetAllUserTypes getAllUserTypes,
+    public static UserTypeController newInstance(CreateUserType createUserType, GetAllUserTypes getAllUserTypes,
             GetUserTypeById getUserTypeById, GetUserTypeByName getUserTypeByName, UpdateUserType updateUserType,
             DeleteUserType deleteUserType, UserTypePresenter presenter) {
         return new UserTypeController(createUserType, getAllUserTypes, getUserTypeById, getUserTypeByName,

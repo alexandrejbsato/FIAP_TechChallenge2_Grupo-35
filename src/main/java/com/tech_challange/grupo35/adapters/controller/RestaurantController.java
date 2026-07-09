@@ -23,7 +23,7 @@ public class RestaurantController {
     private final DeleteRestaurant deleteRestaurant;
     private final RestaurantPresenter presenter;
 
-    public static RestaurantController create(CreateRestaurant createRestaurant, GetAllRestaurants getAllRestaurants,
+    public static RestaurantController newInstance(CreateRestaurant createRestaurant, GetAllRestaurants getAllRestaurants,
             GetRestaurantById getRestaurantById, UpdateRestaurant updateRestaurant, DeleteRestaurant deleteRestaurant,
             RestaurantPresenter presenter) {
         return new RestaurantController(createRestaurant, getAllRestaurants, getRestaurantById, updateRestaurant,

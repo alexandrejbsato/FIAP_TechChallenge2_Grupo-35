@@ -23,7 +23,7 @@ public class MenuItemController {
     private final DeleteMenuItem deleteMenuItem;
     private final MenuItemPresenter presenter;
 
-    public static MenuItemController create(CreateMenuItem createMenuItem,
+    public static MenuItemController newInstance(CreateMenuItem createMenuItem,
             GetMenuItemsByRestaurant getMenuItemsByRestaurant, GetMenuItemById getMenuItemById,
             UpdateMenuItem updateMenuItem, DeleteMenuItem deleteMenuItem, MenuItemPresenter presenter) {
         return new MenuItemController(createMenuItem, getMenuItemsByRestaurant, getMenuItemById, updateMenuItem,

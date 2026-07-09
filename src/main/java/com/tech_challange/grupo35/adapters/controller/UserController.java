@@ -31,7 +31,7 @@ public class UserController {
     private final AssignUserType assignUserType;
     private final UserPresenter presenter;
 
-    public static UserController create(CreateUser createUser, UpdateUser updateUser, ChangePassword changePassword,
+    public static UserController newInstance(CreateUser createUser, UpdateUser updateUser, ChangePassword changePassword,
             DeleteUser deleteUser, FindUsersByName findUsersByName, LoginUser loginUser, AssignUserType assignUserType,
             UserPresenter presenter) {
         return new UserController(createUser, updateUser, changePassword, deleteUser, findUsersByName, loginUser,

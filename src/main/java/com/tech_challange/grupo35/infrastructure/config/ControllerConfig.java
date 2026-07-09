@@ -41,7 +41,7 @@ public class ControllerConfig {
     public UserTypeController userTypeController(CreateUserType createUserType, GetAllUserTypes getAllUserTypes,
             GetUserTypeById getUserTypeById, GetUserTypeByName getUserTypeByName, UpdateUserType updateUserType,
             DeleteUserType deleteUserType, UserTypePresenter userTypePresenter) {
-        return UserTypeController.create(createUserType, getAllUserTypes, getUserTypeById, getUserTypeByName,
+        return UserTypeController.newInstance(createUserType, getAllUserTypes, getUserTypeById, getUserTypeByName,
                 updateUserType, deleteUserType, userTypePresenter);
     }
 
@@ -49,7 +49,7 @@ public class ControllerConfig {
     public UserController userController(CreateUser createUser, UpdateUser updateUser, ChangePassword changePassword,
             DeleteUser deleteUser, FindUsersByName findUsersByName, LoginUser loginUser, AssignUserType assignUserType,
             UserPresenter userPresenter) {
-        return UserController.create(createUser, updateUser, changePassword, deleteUser, findUsersByName, loginUser,
+        return UserController.newInstance(createUser, updateUser, changePassword, deleteUser, findUsersByName, loginUser,
                 assignUserType, userPresenter);
     }
 
@@ -57,7 +57,7 @@ public class ControllerConfig {
     public RestaurantController restaurantController(CreateRestaurant createRestaurant,
             GetAllRestaurants getAllRestaurants, GetRestaurantById getRestaurantById, UpdateRestaurant updateRestaurant,
             DeleteRestaurant deleteRestaurant, RestaurantPresenter restaurantPresenter) {
-        return RestaurantController.create(createRestaurant, getAllRestaurants, getRestaurantById, updateRestaurant,
+        return RestaurantController.newInstance(createRestaurant, getAllRestaurants, getRestaurantById, updateRestaurant,
                 deleteRestaurant, restaurantPresenter);
     }
 
@@ -65,7 +65,7 @@ public class ControllerConfig {
     public MenuItemController menuItemController(CreateMenuItem createMenuItem,
             GetMenuItemsByRestaurant getMenuItemsByRestaurant, GetMenuItemById getMenuItemById,
             UpdateMenuItem updateMenuItem, DeleteMenuItem deleteMenuItem, MenuItemPresenter menuItemPresenter) {
-        return MenuItemController.create(createMenuItem, getMenuItemsByRestaurant, getMenuItemById, updateMenuItem,
+        return MenuItemController.newInstance(createMenuItem, getMenuItemsByRestaurant, getMenuItemById, updateMenuItem,
                 deleteMenuItem, menuItemPresenter);
     }
 }
