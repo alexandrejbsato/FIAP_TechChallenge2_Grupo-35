@@ -48,8 +48,10 @@ class CreateMenuItemUseCaseTest {
         UUID restaurantId = UUID.randomUUID();
         CreateMenuItemRequest request = request();
         Restaurant restaurant = Restaurant.reconstitute(restaurantId, "Resto", null, "Italiana", "09-18", null);
-        MenuItem model = new MenuItem();
-        MenuItem saved = new MenuItem();
+        MenuItem model = MenuItem.reconstitute(null, "Lasanha", "Massa fresca",
+                BigDecimal.valueOf(49.90), true, "/foto.jpg", restaurant);
+        MenuItem saved = MenuItem.reconstitute(UUID.randomUUID(), "Lasanha", "Massa fresca",
+                BigDecimal.valueOf(49.90), true, "/foto.jpg", restaurant);
         MenuItemResponse expected = new MenuItemResponse(UUID.randomUUID(), "Lasanha", "Massa fresca",
                 BigDecimal.valueOf(49.90), true, "/foto.jpg", restaurantId);
 

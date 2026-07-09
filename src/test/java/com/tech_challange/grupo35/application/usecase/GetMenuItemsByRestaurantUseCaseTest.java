@@ -39,7 +39,8 @@ class GetMenuItemsByRestaurantUseCaseTest {
     @Test
     void returnsMenuItemsWhenRestaurantExists() {
         UUID restaurantId = UUID.randomUUID();
-        MenuItem item = new MenuItem();
+        MenuItem item = MenuItem.reconstitute(UUID.randomUUID(), "Lasanha", "Massa fresca",
+                BigDecimal.TEN, true, "/foto.jpg", null);
         MenuItemResponse response = new MenuItemResponse(UUID.randomUUID(), "Lasanha", "Massa fresca",
                 BigDecimal.TEN, true, "/foto.jpg", restaurantId);
 

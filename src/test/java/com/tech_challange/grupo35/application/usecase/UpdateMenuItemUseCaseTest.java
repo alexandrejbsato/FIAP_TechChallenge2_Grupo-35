@@ -48,9 +48,12 @@ class UpdateMenuItemUseCaseTest {
         UUID restaurantId = UUID.randomUUID();
         UUID itemId = UUID.randomUUID();
         UpdateMenuItemRequest request = request();
-        MenuItem current = new MenuItem();
-        MenuItem updated = new MenuItem();
-        MenuItem saved = new MenuItem();
+        MenuItem current = MenuItem.reconstitute(itemId, "Lasanha", "Massa fresca",
+                BigDecimal.valueOf(49.90), true, "/foto.jpg", null);
+        MenuItem updated = MenuItem.reconstitute(itemId, "Lasanha", "Massa fresca",
+                BigDecimal.valueOf(59.90), false, "/nova.jpg", null);
+        MenuItem saved = MenuItem.reconstitute(itemId, "Lasanha", "Massa fresca",
+                BigDecimal.valueOf(59.90), false, "/nova.jpg", null);
         MenuItemResponse expected = new MenuItemResponse(itemId, "Lasanha", "Massa fresca",
                 BigDecimal.valueOf(59.90), false, "/nova.jpg", restaurantId);
 
