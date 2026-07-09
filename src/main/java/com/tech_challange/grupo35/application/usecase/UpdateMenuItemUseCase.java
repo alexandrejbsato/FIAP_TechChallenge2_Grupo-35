@@ -1,6 +1,5 @@
 package com.tech_challange.grupo35.application.usecase;
 
-import com.tech_challange.grupo35.application.dto.MenuItemResponse;
 import com.tech_challange.grupo35.application.dto.UpdateMenuItemRequest;
 import com.tech_challange.grupo35.application.mapper.MenuItemMapper;
 import com.tech_challange.grupo35.application.port.in.UpdateMenuItem;
@@ -22,13 +21,13 @@ public class UpdateMenuItemUseCase implements UpdateMenuItem {
     private final MenuItemMapper menuItemMapper;
 
     @Override
-    public MenuItemResponse execute(UUID restaurantId, UUID menuItemId, UpdateMenuItemRequest request) {
+    public MenuItem execute(UUID restaurantId, UUID menuItemId, UpdateMenuItemRequest request) {
         if (!restaurantRepository.existsById(restaurantId)) {
             throw new RestaurantNotFoundException(restaurantId);
         }
         MenuItem current = menuItemRepository.findByIdAndRestaurantId(menuItemId, restaurantId)
                 .orElseThrow(() -> new MenuItemNotFoundException(menuItemId));
         MenuItem updated = menuItemMapper.updateModel(current, request);
-        return menuItemMapper.toResponse(menuItemRepository.save(updated));
+        return menuItemRepository.save(updated);
     }
 }

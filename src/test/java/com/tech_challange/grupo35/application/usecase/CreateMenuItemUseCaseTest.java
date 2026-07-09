@@ -1,7 +1,6 @@
 package com.tech_challange.grupo35.application.usecase;
 
 import com.tech_challange.grupo35.application.dto.CreateMenuItemRequest;
-import com.tech_challange.grupo35.application.dto.MenuItemResponse;
 import com.tech_challange.grupo35.application.mapper.MenuItemMapper;
 import com.tech_challange.grupo35.application.port.out.MenuItemRepository;
 import com.tech_challange.grupo35.application.port.out.RestaurantRepository;
@@ -52,17 +51,14 @@ class CreateMenuItemUseCaseTest {
                 BigDecimal.valueOf(49.90), true, "/foto.jpg", restaurant);
         MenuItem saved = MenuItem.reconstitute(UUID.randomUUID(), "Lasanha", "Massa fresca",
                 BigDecimal.valueOf(49.90), true, "/foto.jpg", restaurant);
-        MenuItemResponse expected = new MenuItemResponse(UUID.randomUUID(), "Lasanha", "Massa fresca",
-                BigDecimal.valueOf(49.90), true, "/foto.jpg", restaurantId);
 
         when(restaurantRepository.findById(restaurantId)).thenReturn(Optional.of(restaurant));
         when(menuItemMapper.toModel(request, restaurant)).thenReturn(model);
         when(menuItemRepository.save(model)).thenReturn(saved);
-        when(menuItemMapper.toResponse(saved)).thenReturn(expected);
 
-        MenuItemResponse response = useCase.execute(restaurantId, request);
+        MenuItem response = useCase.execute(restaurantId, request);
 
-        assertSame(expected, response);
+        assertSame(saved, response);
         verify(menuItemRepository).save(model);
     }
 

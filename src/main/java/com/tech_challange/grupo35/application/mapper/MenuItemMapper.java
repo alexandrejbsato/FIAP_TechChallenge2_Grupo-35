@@ -1,7 +1,6 @@
 package com.tech_challange.grupo35.application.mapper;
 
 import com.tech_challange.grupo35.application.dto.CreateMenuItemRequest;
-import com.tech_challange.grupo35.application.dto.MenuItemResponse;
 import com.tech_challange.grupo35.application.dto.UpdateMenuItemRequest;
 import com.tech_challange.grupo35.domain.model.MenuItem;
 import com.tech_challange.grupo35.domain.model.Restaurant;
@@ -30,18 +29,5 @@ public class MenuItemMapper {
                 request.photoPath()
         );
         return current;
-    }
-
-    public MenuItemResponse toResponse(MenuItem menuItem) {
-        Restaurant restaurant = menuItem.getRestaurant();
-        return new MenuItemResponse(
-                menuItem.getId(),
-                menuItem.getName(),
-                menuItem.getDescription(),
-                menuItem.getPrice(),
-                menuItem.getAvailableOnlyInRestaurant(),
-                menuItem.getPhotoPath(),
-                restaurant != null ? restaurant.getId() : null
-        );
     }
 }

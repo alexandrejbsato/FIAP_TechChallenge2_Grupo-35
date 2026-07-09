@@ -1,8 +1,8 @@
 package com.tech_challange.grupo35.application.port.in;
 
-import com.tech_challange.grupo35.application.dto.MenuItemResponse;
+import com.tech_challange.grupo35.domain.model.MenuItem;
 import java.util.UUID;
 
 public interface GetMenuItemById {
-    MenuItemResponse execute(UUID restaurantId, UUID menuItemId);
+    MenuItem execute(UUID restaurantId, UUID menuItemId);
 }

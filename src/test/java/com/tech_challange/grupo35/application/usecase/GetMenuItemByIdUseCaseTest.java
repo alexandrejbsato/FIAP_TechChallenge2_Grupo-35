@@ -1,7 +1,5 @@
 package com.tech_challange.grupo35.application.usecase;
 
-import com.tech_challange.grupo35.application.dto.MenuItemResponse;
-import com.tech_challange.grupo35.application.mapper.MenuItemMapper;
 import com.tech_challange.grupo35.application.port.out.MenuItemRepository;
 import com.tech_challange.grupo35.application.port.out.RestaurantRepository;
 import com.tech_challange.grupo35.domain.exception.MenuItemNotFoundException;
@@ -31,9 +29,6 @@ class GetMenuItemByIdUseCaseTest {
     @Mock
     private MenuItemRepository menuItemRepository;
 
-    @Mock
-    private MenuItemMapper menuItemMapper;
-
     @InjectMocks
     private GetMenuItemByIdUseCase useCase;
 
@@ -43,16 +38,11 @@ class GetMenuItemByIdUseCaseTest {
         UUID itemId = UUID.randomUUID();
         MenuItem item = MenuItem.reconstitute(itemId, "Lasanha", "Massa fresca",
                 BigDecimal.TEN, true, "/foto.jpg", null);
-        MenuItemResponse expected = new MenuItemResponse(itemId, "Lasanha", "Massa fresca",
-                BigDecimal.TEN, true, "/foto.jpg", restaurantId);
 
         when(restaurantRepository.existsById(restaurantId)).thenReturn(true);
         when(menuItemRepository.findByIdAndRestaurantId(itemId, restaurantId)).thenReturn(Optional.of(item));
-        when(menuItemMapper.toResponse(item)).thenReturn(expected);
 
-        MenuItemResponse response = useCase.execute(restaurantId, itemId);
-
-        assertSame(expected, response);
+        assertSame(item, useCase.execute(restaurantId, itemId));
     }
 
     @Test

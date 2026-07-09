@@ -1,13 +1,9 @@
 package com.tech_challange.grupo35.infrastructure.web.controller;
 
+import com.tech_challange.grupo35.adapters.controller.MenuItemController;
 import com.tech_challange.grupo35.application.dto.CreateMenuItemRequest;
 import com.tech_challange.grupo35.application.dto.MenuItemResponse;
 import com.tech_challange.grupo35.application.dto.UpdateMenuItemRequest;
-import com.tech_challange.grupo35.application.port.in.CreateMenuItem;
-import com.tech_challange.grupo35.application.port.in.DeleteMenuItem;
-import com.tech_challange.grupo35.application.port.in.GetMenuItemById;
-import com.tech_challange.grupo35.application.port.in.GetMenuItemsByRestaurant;
-import com.tech_challange.grupo35.application.port.in.UpdateMenuItem;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -34,13 +30,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/restaurants/{restaurantId}/menu-items")
 @RequiredArgsConstructor
 @Tag(name = "Itens do Cardapio", description = "Endpoints para gerenciar itens do cardapio de um restaurante")
-public class MenuItemController {
+public class MenuItemApiController {
 
-    private final CreateMenuItem createMenuItemUseCase;
-    private final GetMenuItemsByRestaurant getMenuItemsByRestaurantUseCase;
-    private final GetMenuItemById getMenuItemByIdUseCase;
-    private final UpdateMenuItem updateMenuItemUseCase;
-    private final DeleteMenuItem deleteMenuItemUseCase;
+    private final MenuItemController controller;
 
     private static final String MENU_ITEM_EXAMPLE = """
             {
@@ -79,7 +71,7 @@ public class MenuItemController {
                     content = @Content(mediaType = "application/json",
                             examples = @ExampleObject(value = REQUEST_EXAMPLE)))
             @RequestBody @Valid CreateMenuItemRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(createMenuItemUseCase.execute(restaurantId, request));
+        return ResponseEntity.status(HttpStatus.CREATED).body(controller.create(restaurantId, request));
     }
 
     @GetMapping
@@ -91,7 +83,7 @@ public class MenuItemController {
             @ApiResponse(responseCode = "404", description = "Restaurante nao encontrado")
     })
     public ResponseEntity<List<MenuItemResponse>> findByRestaurant(@PathVariable UUID restaurantId) {
-        return ResponseEntity.ok(getMenuItemsByRestaurantUseCase.execute(restaurantId));
+        return ResponseEntity.ok(controller.findByRestaurant(restaurantId));
     }
 
     @GetMapping("/{menuItemId}")
@@ -103,7 +95,7 @@ public class MenuItemController {
             @ApiResponse(responseCode = "404", description = "Restaurante ou item nao encontrado")
     })
     public ResponseEntity<MenuItemResponse> findById(@PathVariable UUID restaurantId, @PathVariable UUID menuItemId) {
-        return ResponseEntity.ok(getMenuItemByIdUseCase.execute(restaurantId, menuItemId));
+        return ResponseEntity.ok(controller.findById(restaurantId, menuItemId));
     }
 
     @PutMapping("/{menuItemId}")
@@ -122,7 +114,7 @@ public class MenuItemController {
                     content = @Content(mediaType = "application/json",
                             examples = @ExampleObject(value = REQUEST_EXAMPLE)))
             @RequestBody @Valid UpdateMenuItemRequest request) {
-        return ResponseEntity.ok(updateMenuItemUseCase.execute(restaurantId, menuItemId, request));
+        return ResponseEntity.ok(controller.update(restaurantId, menuItemId, request));
     }
 
     @DeleteMapping("/{menuItemId}")
@@ -132,7 +124,7 @@ public class MenuItemController {
             @ApiResponse(responseCode = "404", description = "Restaurante ou item nao encontrado")
     })
     public ResponseEntity<Void> delete(@PathVariable UUID restaurantId, @PathVariable UUID menuItemId) {
-        deleteMenuItemUseCase.execute(restaurantId, menuItemId);
+        controller.delete(restaurantId, menuItemId);
         return ResponseEntity.noContent().build();
     }
 }
