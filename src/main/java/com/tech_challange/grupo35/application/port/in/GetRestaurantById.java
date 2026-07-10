@@ -1,9 +1,9 @@
 package com.tech_challange.grupo35.application.port.in;
 
-import com.tech_challange.grupo35.application.dto.RestaurantResponse;
+import com.tech_challange.grupo35.domain.model.Restaurant;
 
 import java.util.UUID;
 
 public interface GetRestaurantById {
-    RestaurantResponse execute(UUID id);
+    Restaurant execute(UUID id);
 }

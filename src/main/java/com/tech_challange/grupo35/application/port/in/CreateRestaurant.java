@@ -1,8 +1,8 @@
 package com.tech_challange.grupo35.application.port.in;
 
 import com.tech_challange.grupo35.application.dto.CreateRestaurantRequest;
-import com.tech_challange.grupo35.application.dto.RestaurantResponse;
+import com.tech_challange.grupo35.domain.model.Restaurant;
 
 public interface CreateRestaurant {
-    RestaurantResponse execute(CreateRestaurantRequest request);
+    Restaurant execute(CreateRestaurantRequest request);
 }

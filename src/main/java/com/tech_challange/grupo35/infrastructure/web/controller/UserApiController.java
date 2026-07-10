@@ -1,5 +1,6 @@
 package com.tech_challange.grupo35.infrastructure.web.controller;
 
+import com.tech_challange.grupo35.adapters.controller.UserController;
 import com.tech_challange.grupo35.application.dto.AssignUserTypeRequest;
 import com.tech_challange.grupo35.application.dto.ChangePasswordRequest;
 import com.tech_challange.grupo35.application.dto.CreateUserRequest;
@@ -7,13 +8,6 @@ import com.tech_challange.grupo35.application.dto.LoginRequest;
 import com.tech_challange.grupo35.application.dto.LoginResponse;
 import com.tech_challange.grupo35.application.dto.UpdateUserRequest;
 import com.tech_challange.grupo35.application.dto.UserResponse;
-import com.tech_challange.grupo35.application.port.in.AssignUserType;
-import com.tech_challange.grupo35.application.port.in.ChangePassword;
-import com.tech_challange.grupo35.application.port.in.CreateUser;
-import com.tech_challange.grupo35.application.port.in.DeleteUser;
-import com.tech_challange.grupo35.application.port.in.FindUsersByName;
-import com.tech_challange.grupo35.application.port.in.LoginUser;
-import com.tech_challange.grupo35.application.port.in.UpdateUser;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -34,15 +28,9 @@ import java.util.UUID;
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 @Tag(name = "Usuários", description = "Endpoints para operações gerais de usuários")
-public class UserController {
+public class UserApiController {
 
-    private final CreateUser createUserUseCase;
-    private final UpdateUser updateUserUseCase;
-    private final ChangePassword changePasswordUseCase;
-    private final DeleteUser deleteUserUseCase;
-    private final FindUsersByName findUsersByNameUseCase;
-    private final LoginUser loginUseCase;
-    private final AssignUserType assignUserTypeUseCase;
+    private final UserController controller;
 
     @PostMapping
     @Operation(summary = "Criar um novo usuário", description = "Cria um novo usuário com os detalhes fornecidos")
@@ -115,7 +103,7 @@ public class UserController {
                         """)))
             @RequestBody @Valid CreateUserRequest request) {
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(createUserUseCase.execute(request));
+        return ResponseEntity.status(HttpStatus.CREATED).body(controller.create(request));
     }
 
     @PatchMapping("/{id}")
@@ -196,7 +184,7 @@ public class UserController {
                         """)))
             @RequestBody @Valid UpdateUserRequest request) {
 
-        return ResponseEntity.ok(updateUserUseCase.execute(id, request));
+        return ResponseEntity.ok(controller.update(id, request));
     }
 
     @PatchMapping("/{id}/password")
@@ -236,7 +224,7 @@ public class UserController {
                         """)))
             @RequestBody @Valid ChangePasswordRequest request) {
 
-        changePasswordUseCase.execute(id, request);
+        controller.changePassword(id, request);
         return ResponseEntity.noContent().build();
     }
 
@@ -256,7 +244,7 @@ public class UserController {
                         """)))
     })
     public ResponseEntity<Void> deleteUser(@PathVariable UUID id) {
-        deleteUserUseCase.execute(id);
+        controller.delete(id);
         return ResponseEntity.noContent().build();
     }
 
@@ -289,7 +277,7 @@ public class UserController {
                         """)))
     })
     public ResponseEntity<List<UserResponse>> findByName(@RequestParam String name) {
-        return ResponseEntity.ok(findUsersByNameUseCase.execute(name));
+        return ResponseEntity.ok(controller.findByName(name));
     }
 
     @PatchMapping("/{id}/user-type")
@@ -324,7 +312,7 @@ public class UserController {
                         { "userTypeId": "c3d4e5f6-a7b8-9012-cdef-012345678901" }
                         """)))
             @RequestBody @Valid AssignUserTypeRequest request) {
-        return ResponseEntity.ok(assignUserTypeUseCase.execute(id, request));
+        return ResponseEntity.ok(controller.assignUserType(id, request));
     }
 
     @PostMapping("/login")
@@ -368,6 +356,6 @@ public class UserController {
                         }
                         """)))
             @RequestBody LoginRequest request) {
-        return ResponseEntity.ok(loginUseCase.execute(request.login(), request.password()));
+        return ResponseEntity.ok(controller.login(request));
     }
 }

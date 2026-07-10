@@ -1,6 +1,5 @@
 package com.tech_challange.grupo35.application.usecase;
 
-import com.tech_challange.grupo35.application.dto.UserTypeResponse;
 import com.tech_challange.grupo35.application.port.out.UserTypeRepository;
 import com.tech_challange.grupo35.domain.model.UserType;
 import org.junit.jupiter.api.Test;
@@ -31,11 +30,11 @@ class GetAllUserTypesUseCaseTest {
         UserType b = UserType.reconstitute(UUID.randomUUID(), "RESTAURANT_OWNER");
         when(userTypeRepository.findAll()).thenReturn(List.of(a, b));
 
-        List<UserTypeResponse> response = useCase.execute();
+        List<UserType> response = useCase.execute();
 
         assertEquals(2, response.size());
-        assertEquals("CUSTOMER", response.get(0).name());
-        assertEquals("RESTAURANT_OWNER", response.get(1).name());
+        assertEquals("CUSTOMER", response.get(0).getName());
+        assertEquals("RESTAURANT_OWNER", response.get(1).getName());
     }
 
     @Test

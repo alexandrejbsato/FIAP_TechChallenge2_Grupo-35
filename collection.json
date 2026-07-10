@@ -2,7 +2,7 @@
   "info": {
     "_postman_id": "c4ac3336-2c65-4bbe-8b47-2d5dd41d2f97",
     "name": "Tech Challenge Fase 2 - Usuários API",
-    "description": "Collection Postman para validar os cenários de usuários e tipos de usuário: cadastro, login, busca, associação de tipo, troca de senha, atualização e exclusão. Ajuste {{baseUrl}} se sua aplicação usar outra porta/context path.\n\nApós a remoção da herança Customer/RestaurantOwner, todo usuário é criado via POST /api/v1/users e atualizado via PATCH /api/v1/users/{id}. A distinção de tipo (Cliente/Dono) é feita pela associação a um UserType (PATCH /api/v1/users/{id}/user-type).\n\nEndpoints públicos: POST /api/v1/users, /api/v1/users/login e /api/v1/user-types(/**). Os demais (busca, associação de tipo, troca de senha, atualização e exclusão de usuário) exigem Bearer Token salvo pela requisição de login na variável {{token}}.\n\nExecute as pastas na ordem (01 → 08): elas salvam customerId, ownerId, userTypeId e token em variáveis de coleção usadas pelas requisições seguintes.",
+    "description": "Collection Postman para validar os cenários de usuários e tipos de usuário: cadastro, login, busca, associação de tipo, troca de senha, atualização e exclusão. Ajuste {{baseUrl}} se sua aplicação usar outra porta/context path.\n\nApós a remoção da herança Customer/RestaurantOwner, todo usuário é criado via POST /api/v1/users e atualizado via PATCH /api/v1/users/{id}. A distinção de tipo (Cliente/Dono) é feita pela associação a um UserType (PATCH /api/v1/users/{id}/user-type).\n\nEndpoints públicos: POST /api/v1/users, /api/v1/users/login e /api/v1/user-types(/**). Os demais (busca, associação de tipo, troca de senha, atualização e exclusão de usuário) exigem Bearer Token salvo pela requisição de login na variável {{token}}.\n\nExecute as pastas na ordem (01 → 10): elas salvam customerId, ownerId, userTypeId, token, restoToken/restoOwnerId, restaurantId, menuRestaurantId e menuItemId em variáveis de coleção usadas pelas requisições seguintes. A pasta 10 (Itens do Cardápio) depende da pasta 09 (Restaurantes), pois reaproveita o dono e o token nela criados.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_exporter_id": "38191128"
   },
@@ -2683,6 +2683,770 @@
           "response": []
         }
       ]
+    },
+    {
+      "name": "10 - Itens do Cardápio",
+      "item": [
+        {
+          "name": "Setup - Criar restaurante para itens (sucesso)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201 - restaurante criado', function () { pm.response.to.have.status(201); });",
+                  "pm.test('Resposta possui id', function () { const json = pm.response.json(); pm.expect(json.id).to.exist; pm.collectionVariables.set('menuRestaurantId', json.id); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{restoToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Cantina do Cardápio\",\n  \"address\": {\n    \"street\": \"Rua do Sabor\",\n    \"number\": \"50\",\n    \"neighborhood\": \"Centro\",\n    \"city\": \"São Paulo\",\n    \"state\": \"SP\",\n    \"zipCode\": \"01000-000\"\n  },\n  \"cuisineType\": \"Italiana\",\n  \"openingHours\": \"Seg-Sex 11:00-23:00\",\n  \"ownerId\": \"{{restoOwnerId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/restaurants",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "restaurants"
+              ]
+            },
+            "description": "Cria um restaurante dedicado aos itens de cardápio (reaproveita o dono e o token da pasta 09). Salva o id em {{menuRestaurantId}}. Execute a pasta 09 antes desta."
+          },
+          "response": []
+        },
+        {
+          "name": "Criar item - sucesso",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201 - item criado', function () { pm.response.to.have.status(201); });",
+                  "pm.test('Resposta possui id', function () { const json = pm.response.json(); pm.expect(json.id).to.exist; pm.collectionVariables.set('menuItemId', json.id); });",
+                  "pm.test('restaurantId confere', function () { pm.expect(pm.response.json().restaurantId).to.eql(pm.collectionVariables.get('menuRestaurantId')); });",
+                  "pm.test('Campos retornados', function () { const json = pm.response.json(); pm.expect(json.name).to.eql('Lasanha Bolonhesa'); pm.expect(json.availableOnlyInRestaurant).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{restoToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Lasanha Bolonhesa\",\n  \"description\": \"Massa fresca com molho bolonhesa e queijo gratinado\",\n  \"price\": 49.90,\n  \"availableOnlyInRestaurant\": true,\n  \"photoPath\": \"/images/menu/lasanha-bolonhesa.jpg\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/restaurants/{{menuRestaurantId}}/menu-items",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "restaurants",
+                "{{menuRestaurantId}}",
+                "menu-items"
+              ]
+            },
+            "description": "Cria um item no cardápio do restaurante {{menuRestaurantId}}. Salva o id em {{menuItemId}}."
+          },
+          "response": []
+        },
+        {
+          "name": "Criar item - erro sem token (403)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 403 - acesso negado sem token', function () { pm.response.to.have.status(403); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Item Sem Token\",\n  \"description\": \"Deve falhar\",\n  \"price\": 10.00,\n  \"availableOnlyInRestaurant\": false,\n  \"photoPath\": \"/images/menu/item.jpg\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/restaurants/{{menuRestaurantId}}/menu-items",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "restaurants",
+                "{{menuRestaurantId}}",
+                "menu-items"
+              ]
+            },
+            "description": "Endpoint protegido. Sem Bearer token. Esperado: 403 Forbidden."
+          },
+          "response": []
+        },
+        {
+          "name": "Criar item - erro campos inválidos (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 400 - validação esperada', function () { pm.response.to.have.status(400); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{restoToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"\",\n  \"description\": \"\",\n  \"price\": 0,\n  \"availableOnlyInRestaurant\": null,\n  \"photoPath\": \"\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/restaurants/{{menuRestaurantId}}/menu-items",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "restaurants",
+                "{{menuRestaurantId}}",
+                "menu-items"
+              ]
+            },
+            "description": "Valida @NotBlank (name/description/photoPath), @NotNull (availableOnlyInRestaurant) e @DecimalMin 0.01 (price). Esperado: 400 Bad Request."
+          },
+          "response": []
+        },
+        {
+          "name": "Criar item - erro restaurante inexistente (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 404 - restaurante não encontrado', function () { pm.response.to.have.status(404); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{restoToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Item Órfão\",\n  \"description\": \"Restaurante inexistente\",\n  \"price\": 20.00,\n  \"availableOnlyInRestaurant\": false,\n  \"photoPath\": \"/images/menu/item.jpg\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/restaurants/00000000-0000-0000-0000-000000000000/menu-items",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "restaurants",
+                "00000000-0000-0000-0000-000000000000",
+                "menu-items"
+              ]
+            },
+            "description": "restaurantId inexistente com corpo válido. Esperado: 404 Not Found (RestaurantNotFoundException)."
+          },
+          "response": []
+        },
+        {
+          "name": "Listar itens - sucesso",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200 - lista retornada', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Resposta é array com o item criado', function () { const json = pm.response.json(); pm.expect(json).to.be.an('array'); pm.expect(json.length).to.be.above(0); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{restoToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/restaurants/{{menuRestaurantId}}/menu-items",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "restaurants",
+                "{{menuRestaurantId}}",
+                "menu-items"
+              ]
+            },
+            "description": "Lista os itens do cardápio do restaurante {{menuRestaurantId}}."
+          },
+          "response": []
+        },
+        {
+          "name": "Listar itens - erro restaurante inexistente (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 404 - restaurante não encontrado', function () { pm.response.to.have.status(404); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{restoToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/restaurants/00000000-0000-0000-0000-000000000000/menu-items",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "restaurants",
+                "00000000-0000-0000-0000-000000000000",
+                "menu-items"
+              ]
+            },
+            "description": "Esperado: 404 Not Found (RestaurantNotFoundException)."
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar item por id - sucesso",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200 - item encontrado', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Id confere', function () { pm.expect(pm.response.json().id).to.eql(pm.collectionVariables.get('menuItemId')); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{restoToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/restaurants/{{menuRestaurantId}}/menu-items/{{menuItemId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "restaurants",
+                "{{menuRestaurantId}}",
+                "menu-items",
+                "{{menuItemId}}"
+              ]
+            },
+            "description": "Busca o item {{menuItemId}} do restaurante {{menuRestaurantId}}."
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar item por id - erro inexistente (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 404 - item não encontrado', function () { pm.response.to.have.status(404); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{restoToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/restaurants/{{menuRestaurantId}}/menu-items/00000000-0000-0000-0000-000000000000",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "restaurants",
+                "{{menuRestaurantId}}",
+                "menu-items",
+                "00000000-0000-0000-0000-000000000000"
+              ]
+            },
+            "description": "Item inexistente em um restaurante existente. Esperado: 404 Not Found (MenuItemNotFoundException)."
+          },
+          "response": []
+        },
+        {
+          "name": "Atualizar item - sucesso",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200 - item atualizado', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Nome atualizado', function () { pm.expect(pm.response.json().name).to.eql('Lasanha Bolonhesa - Especial'); });",
+                  "pm.test('Disponibilidade atualizada', function () { pm.expect(pm.response.json().availableOnlyInRestaurant).to.eql(false); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{restoToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Lasanha Bolonhesa - Especial\",\n  \"description\": \"Massa fresca, molho bolonhesa artesanal e queijo gratinado\",\n  \"price\": 59.90,\n  \"availableOnlyInRestaurant\": false,\n  \"photoPath\": \"/images/menu/lasanha-especial.jpg\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/restaurants/{{menuRestaurantId}}/menu-items/{{menuItemId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "restaurants",
+                "{{menuRestaurantId}}",
+                "menu-items",
+                "{{menuItemId}}"
+              ]
+            },
+            "description": "Atualiza o item (substituição completa dos campos). O restaurante ao qual o item pertence não muda."
+          },
+          "response": []
+        },
+        {
+          "name": "Atualizar item - erro campos inválidos (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 400 - validação esperada', function () { pm.response.to.have.status(400); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{restoToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"\",\n  \"description\": \"desc\",\n  \"price\": 0,\n  \"availableOnlyInRestaurant\": true,\n  \"photoPath\": \"/x.jpg\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/restaurants/{{menuRestaurantId}}/menu-items/{{menuItemId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "restaurants",
+                "{{menuRestaurantId}}",
+                "menu-items",
+                "{{menuItemId}}"
+              ]
+            },
+            "description": "Nome em branco e price abaixo de 0.01. Esperado: 400 Bad Request."
+          },
+          "response": []
+        },
+        {
+          "name": "Atualizar item - erro item inexistente (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 404 - item não encontrado', function () { pm.response.to.have.status(404); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{restoToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Item Inexistente\",\n  \"description\": \"Deve falhar\",\n  \"price\": 30.00,\n  \"availableOnlyInRestaurant\": true,\n  \"photoPath\": \"/images/menu/item.jpg\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/restaurants/{{menuRestaurantId}}/menu-items/00000000-0000-0000-0000-000000000000",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "restaurants",
+                "{{menuRestaurantId}}",
+                "menu-items",
+                "00000000-0000-0000-0000-000000000000"
+              ]
+            },
+            "description": "Item inexistente em um restaurante existente. Esperado: 404 Not Found (MenuItemNotFoundException)."
+          },
+          "response": []
+        },
+        {
+          "name": "Deletar item - sucesso",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 204 - item deletado', function () { pm.response.to.have.status(204); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{restoToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/restaurants/{{menuRestaurantId}}/menu-items/{{menuItemId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "restaurants",
+                "{{menuRestaurantId}}",
+                "menu-items",
+                "{{menuItemId}}"
+              ]
+            },
+            "description": "Remove o item {{menuItemId}}. Esperado: 204 No Content."
+          },
+          "response": []
+        },
+        {
+          "name": "Deletar item - erro inexistente (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 404 - item não encontrado', function () { pm.response.to.have.status(404); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{restoToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/restaurants/{{menuRestaurantId}}/menu-items/{{menuItemId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "restaurants",
+                "{{menuRestaurantId}}",
+                "menu-items",
+                "{{menuItemId}}"
+              ]
+            },
+            "description": "Repete o DELETE do item já removido. Esperado: 404 Not Found (MenuItemNotFoundException)."
+          },
+          "response": []
+        },
+        {
+          "name": "Cleanup - Deletar restaurante dos itens (sucesso)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 204 - restaurante deletado', function () { pm.response.to.have.status(204); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{restoToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/restaurants/{{menuRestaurantId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "restaurants",
+                "{{menuRestaurantId}}"
+              ]
+            },
+            "description": "Remove o restaurante criado para os itens de cardápio, deixando o ambiente limpo. Esperado: 204 No Content."
+          },
+          "response": []
+        }
+      ]
     }
   ],
   "variable": [
@@ -2757,6 +3521,14 @@
     {
       "key": "restoOwnerPassword",
       "value": "Senha@123"
+    },
+    {
+      "key": "menuRestaurantId",
+      "value": ""
+    },
+    {
+      "key": "menuItemId",
+      "value": ""
     }
   ]
 }

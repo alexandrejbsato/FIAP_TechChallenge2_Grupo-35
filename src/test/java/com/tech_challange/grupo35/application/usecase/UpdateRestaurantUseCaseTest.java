@@ -1,7 +1,6 @@
 package com.tech_challange.grupo35.application.usecase;
 
 import com.tech_challange.grupo35.application.dto.AddressDto;
-import com.tech_challange.grupo35.application.dto.RestaurantResponse;
 import com.tech_challange.grupo35.application.dto.UpdateRestaurantRequest;
 import com.tech_challange.grupo35.application.mapper.RestaurantMapper;
 import com.tech_challange.grupo35.application.port.out.RestaurantRepository;
@@ -56,17 +55,15 @@ class UpdateRestaurantUseCaseTest {
         User owner = mock(User.class);
         Restaurant updated = mock(Restaurant.class);
         Restaurant saved = mock(Restaurant.class);
-        RestaurantResponse expected = new RestaurantResponse(id, "Resto", null, "Italiana", "09-18", null);
 
         when(restaurantRepository.findById(id)).thenReturn(Optional.of(current));
         when(userRepository.findById(ownerId)).thenReturn(Optional.of(owner));
         when(restaurantMapper.updateModel(current, request, owner)).thenReturn(updated);
         when(restaurantRepository.save(updated)).thenReturn(saved);
-        when(restaurantMapper.toResponse(saved)).thenReturn(expected);
 
-        RestaurantResponse response = useCase.execute(id, request);
+        Restaurant response = useCase.execute(id, request);
 
-        assertSame(expected, response);
+        assertSame(saved, response);
         verify(restaurantRepository).save(updated);
     }
 

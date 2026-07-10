@@ -1,8 +1,8 @@
 package com.tech_challange.grupo35.application.port.in;
 
 import com.tech_challange.grupo35.application.dto.CreateUserTypeRequest;
-import com.tech_challange.grupo35.application.dto.UserTypeResponse;
+import com.tech_challange.grupo35.domain.model.UserType;
 
 public interface CreateUserType {
-    UserTypeResponse execute(CreateUserTypeRequest request);
+    UserType execute(CreateUserTypeRequest request);
 }
