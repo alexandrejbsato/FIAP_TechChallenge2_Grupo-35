@@ -81,4 +81,30 @@ class RestaurantTest {
         assertEquals("Japanese", restaurant.getCuisineType());
         assertEquals("10-22", restaurant.getOpeningHours());
     }
+
+    @Test
+    void createRejectsNullName() {
+        User owner = user(UserTypeNames.RESTAURANT_OWNER);
+
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
+                () -> Restaurant.create(null, address(), "Italian", "09-18", owner));
+
+        assertEquals("name is required", ex.getMessage());
+    }
+
+    @Test
+    void createRejectsBlankName() {
+        User owner = user(UserTypeNames.RESTAURANT_OWNER);
+
+        assertThrows(IllegalArgumentException.class,
+                () -> Restaurant.create("   ", address(), "Italian", "09-18", owner));
+    }
+
+    @Test
+    void updateDetailsRejectsBlankName() {
+        Restaurant restaurant = restaurant();
+
+        assertThrows(IllegalArgumentException.class,
+                () -> restaurant.updateDetails(" ", address(), "Japanese", "10-22"));
+    }
 }
